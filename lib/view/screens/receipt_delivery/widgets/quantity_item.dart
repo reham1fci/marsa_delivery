@@ -28,8 +28,9 @@ class QtyItem extends StatelessWidget{
                         Spacer() ,
                         Text('${getTranslated("qty", context)??""}  :' ,) ,
                         Align(child:  Text(ship!.qty!  , style:  TextStyle(color: AppColors.logRed),) ,alignment: Alignment.centerRight,),
-
-                      ]),
+                        Spacer() ,
+              Text(ship!.date!)
+                  ]),
                 ],),padding: EdgeInsets.all(10.0), ),
 
               color: AppColors.white ,

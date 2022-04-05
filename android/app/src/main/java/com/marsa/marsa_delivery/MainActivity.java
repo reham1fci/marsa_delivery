@@ -1,4 +1,4 @@
-package com.example.marsa_delivery;
+package com.marsa.marsa_delivery;
 
 import io.flutter.embedding.android.FlutterActivity;
 

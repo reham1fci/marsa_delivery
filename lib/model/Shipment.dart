@@ -35,8 +35,9 @@ date: json["dis_date"]  , productName: json["product_name"]  , qty:   json["tota
     return
       Shipment(
 disId: json["dis_id"]  , productName: json["product_name"]  , qty:   json["total_amount"] ,
-        lng:  json["lng"] , lat:  json["lat"] , customerID: json["customer_id"]  , customerMobile:json["customer_mobile"]   ,  customerNm:  json["customer_name"] ,
-
+        lng:  json["lng"] , lat:  json["lat"] , customerID: json["customer_id"]  , customerMobile:json["customer_mobile"]   ,
+          customerNm:  json["customer_name"] ,
+          date: json["dis_date"]
 
       );
   }
@@ -48,6 +49,7 @@ disId: json["dis_id"]  , productName: json["product_name"]  , qty:   json["total
       "lng" :lng ,
       "d_lat" :userLat ,
       "d_lng" :userLng ,
+      "dis_date":date ,
     } ;
   }  Map<String, dynamic> deliveryNotDoneMap (String userId , String reason  , String userLat ,String userLng){
     return {
@@ -56,7 +58,7 @@ disId: json["dis_id"]  , productName: json["product_name"]  , qty:   json["total
       "reason" : reason ,
       "lat":userLat ,
       "lng": userLng ,
-
+      "dis_date":date ,
     } ;
   }
 

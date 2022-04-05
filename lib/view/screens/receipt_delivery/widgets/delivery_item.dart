@@ -43,7 +43,6 @@ class _DeliveryItemState extends State<DeliveryItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    item   =  widget.list [widget.index]  ;
      user  = widget.mUser  ;
   }
 
@@ -51,6 +50,7 @@ class _DeliveryItemState extends State<DeliveryItem> {
 
   @override
   Widget build(BuildContext context) {
+    item   =  widget.list [widget.index]  ;
 
     // TODO: implement build
     return   GestureDetector(
@@ -97,9 +97,10 @@ onLongPressStart: (LongPressStartDetails details){
             },)],) ) ,
              Row(children: [
                Padding(padding: const EdgeInsets.all(5.0) , child: Text(item.productName!)),
-               Spacer() ,
+              Spacer() ,
               Text('${getTranslated("qty", context)??""}  :' , style: TextStyle(color: AppColors.logRed),),   Padding(padding: const EdgeInsets.all(5.0) ,child:Text(item.qty!)),
-
+               Spacer() ,
+               Padding(padding: const EdgeInsets.all(5.0) ,child:Text(item.date!))
              ],)
             ],)),
 

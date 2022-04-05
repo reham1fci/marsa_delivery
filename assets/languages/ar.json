@@ -53,7 +53,8 @@
   "qrcode" : "كيوار كود "  ,
   "in_customer_location" : "ف نطاق موقع العميل "  ,
   "delivery_methods" : "اختر طريقة التسليم ",
-  "out_location" : "انت خارج نطاق موقع العميل "
+  "out_location" : "انت خارج نطاق موقع العميل "  ,
+  "all" : "الكل"
 
 
 }

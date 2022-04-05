@@ -10,6 +10,7 @@ import 'package:marsa_delivery/model/User.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
 import 'package:marsa_delivery/view/base/alert_dialog.dart';
+import 'package:marsa_delivery/view/base/dropdown_btn.dart';
 import 'package:marsa_delivery/view/base/get_current_location.dart';
 import 'package:marsa_delivery/view/base/no_thing_to_show.dart';
 import 'package:marsa_delivery/view/screens/points_sale/widegts/client_search_view.dart';
@@ -26,9 +27,11 @@ class DeliveryBody extends StatefulWidget{
 
 }
 class _State extends State<DeliveryBody> {
-  late List<Shipment> shipmentList  =[];
+  static List<Shipment> shipmentList  =[];
   late List<Shipment> selectShipment  =[];
-  late List<Shipment> filterList  =[];
+  static List<Shipment> filterList  =[];
+  static List<String> datesList  =[];
+
   Color cardColor = AppColors.white  ;
   Api api  = Api() ;
   User? user ;
@@ -39,13 +42,17 @@ class _State extends State<DeliveryBody> {
   @override
   void initState() {
     // TODO: implement initState
+    filterList  =shipmentList;
+
     super.initState();
+
     getUserData()  ;
   }
 
   getUserData() async {
-    shipmentList  =[];
-     filterList  =shipmentList;
+    shipmentList= [] ;
+    datesList=[] ;
+    filterList =  shipmentList ;
 
     if(firstTime){
       SharedPreferences  shared = await SharedPreferences.getInstance();
@@ -77,12 +84,12 @@ class _State extends State<DeliveryBody> {
     setState(() {
        loading  = false  ;
     });
+    datesList.add(getTranslated("all", context)??"")  ;
 
     for(int i  = 0; i<list.length ; i++){
       print(list[i]) ;
       Shipment ship = Shipment.fromJsonDelivery(list[i]) ;
-      if(ship.lat!.isNotEmpty&&ship.lng!.isNotEmpty){
-      double distanceMeter  = await getDistanceBetween(double.parse(ship.lat!), double.parse(ship.lng!)) ;
+     if(ship.lat!.isNotEmpty&&ship.lng!.isNotEmpty){double distanceMeter  = await getDistanceBetween(double.parse(ship.lat!), double.parse(ship.lng!)) ;
     ship.distanceBetween   = distanceMeter / 1000  ;
      print( ship.distanceBetween ) ;
       }
@@ -90,15 +97,21 @@ class _State extends State<DeliveryBody> {
         ship.distanceBetween  = 0  ;
       }
       print(ship.distanceBetween) ;
-      setState(() {
+
+        setState(() {
+          if(datesList.contains(ship.date)){
+          }
+          else{
+            datesList.add(ship.date!) ;
+          }
         shipmentList.add(ship) ;
 
       });
 
-    }
+   }
 setState(() {
  // shipmentList.sort((a, b) => b.distanceBetween!.compareTo(a.distanceBetween!));
-  filterList.sort((a, b) => a.distanceBetween!.compareTo(b.distanceBetween!));
+  shipmentList.sort((a, b) => a.distanceBetween!.compareTo(b.distanceBetween!));
 
 });
 
@@ -110,29 +123,52 @@ setState(() {
     return
       Scaffold(
           appBar: AppBar(backgroundColor: AppColors.colorPrimary,title: Text(getTranslated("shipment_delivery", context)??""),),
-          body:  loading? const Center(child:CircularProgressIndicator(color: AppColors.logRed,)):  shipmentList.isNotEmpty ?   Container( height :double.infinity,child:   Column(children: [
-              ClientSearchView(onChanged: (string){
-          setState(() {
-          filterList =
-          shipmentList
-              .where((u) =>
-          (u.customerNm!
-              .toLowerCase()
-              .contains(string.toLowerCase()) ||
-          u.customerMobile!.toLowerCase().contains(
-          string.toLowerCase())))
-              .toList();
-          });
-          },onSearchEnd:(){
-            setState(() {
-              filterList=shipmentList ;
+          body:  loading? const Center(child:CircularProgressIndicator(color: AppColors.logRed,)):  shipmentList.isNotEmpty ?
+          Container( height :double.infinity,child:   Column(children: [
+            ClientSearchView(onChanged: (string){
+              setState(() {
+                filterList =
+                    shipmentList
+                        .where((u) =>
+                    (u.customerNm!
+                        .toLowerCase()
+                        .contains(string.toLowerCase()) ||
+                        u.customerMobile!.toLowerCase().contains(
+                            string.toLowerCase())
+                    ))
+                        .toList();
+                 print(filterList.toString());
+              });
+            },onSearchEnd:(){
+              setState(() {
+                filterList=shipmentList ;
 
-            });
-          },onFilter: (){
+              });
+            },onFilter: (){
 
-          },),
-        Expanded(child:  ListView.builder(
-            itemBuilder: (context  , index ){
+            },),
+            Padding(padding: EdgeInsets.all(10)    ,
+                child:DropDownBtn(items:datesList  , onChanged:(value){
+                  setState(() {
+                    if(value == getTranslated("all", context)){
+                      filterList  = shipmentList  ;
+                    }
+                    else{
+                      filterList =
+                          shipmentList
+                              .where((u) =>
+                          (u.date!.toLowerCase().contains(
+                              value.toLowerCase())
+                          ))
+                              .toList();
+                      print(filterList.toString());}
+                  });
+                }) ),
+
+            Expanded(child:  ListView.builder(
+          shrinkWrap: true,
+
+          itemBuilder: (context  , index ){
               return
                 DeliveryItem(index: index, list: filterList ,onRefresh: getUserData,mUser: user!,) ;
             } ,itemCount:  filterList.length , ),flex: 1 ,)]))

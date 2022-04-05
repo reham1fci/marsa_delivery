@@ -7,8 +7,12 @@ import 'package:marsa_delivery/model/Shipment.dart';
 import 'package:marsa_delivery/model/User.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
+import 'package:marsa_delivery/utill/app_strings.dart';
 import 'package:marsa_delivery/view/base/alert_dialog.dart';
+import 'package:marsa_delivery/view/base/dropdown_btn.dart';
+import 'package:marsa_delivery/view/base/dropdown_btn.dart';
 import 'package:marsa_delivery/view/base/no_thing_to_show.dart';
+import 'package:marsa_delivery/view/screens/points_sale/widegts/client_search_view.dart';
 import 'package:marsa_delivery/view/screens/receipt_delivery/widgets/shipment_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,23 +25,30 @@ class ReceiptBody extends StatefulWidget{
 
 }
 class _State extends State<ReceiptBody> {
-  late List<Shipment> shipmentList  =[];
-  late List<Shipment> selectShipment  =[];
+  static List<Shipment> shipmentList  =[];
+  static List<Shipment> filterList  =[];
+  static List<Shipment> selectShipment  =[];
+  static List<String> datesList  =[];
   Color cardColor = AppColors.white  ;
   Api api  = Api() ;
    User? user ;
   bool loading  = true  ;
-
+String dropdownvalue  = "اختر التاريخ" ;
   final GestureDetectorKey = GlobalKey<RawGestureDetectorState>();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+  filterList =  shipmentList ;
 getUserData()  ;
   }
    Future <void> getUserData() async {
-   SharedPreferences  shared = await SharedPreferences.getInstance();
+     shipmentList= [] ;
+     datesList=[] ;
+     filterList =  shipmentList ;
+
+     SharedPreferences  shared = await SharedPreferences.getInstance();
        user = User.fromJsonShared(json.decode(shared.getString("user")!));
    Map m  = {"delivery_id":user?.userId} ;
     await api.request(url: Constants.Receipt_URl, map: m, onSuccess: onGetRequest, onError: (err){
@@ -52,15 +63,21 @@ getUserData()  ;
 
      });
     List<dynamic> list = json.decode(jsonObj);
-
+     datesList.add(getTranslated("all", context)??"")  ;
     for(int i  = 0 ; i<list.length ; i++){
       print(list[i]) ;
       Shipment ship = Shipment.fromJson(list[i]) ;
       setState(() {
+         print(ship.date) ;
+        if(datesList.contains(ship.date)){
+        }
+         else{
+          datesList.add(ship.date!) ;
+        }
         shipmentList.add(ship) ;
 
       });
-
+print(datesList) ;
     }
 
 
@@ -72,10 +89,30 @@ getUserData()  ;
    return
      Scaffold(
     appBar: AppBar(backgroundColor: AppColors.colorPrimary,title: Text(getTranslated("shipment_receipt", context)??""),),
-  body:loading? const Center(child:CircularProgressIndicator(color: AppColors.logRed,)): shipmentList.isNotEmpty ?    ListView.builder(
+  body:loading? const Center(child:CircularProgressIndicator(color: AppColors.logRed,)): shipmentList.isNotEmpty ?
+  Container( height :double.infinity,child:   Column(children: [
+Padding(padding: EdgeInsets.all(10)    ,
+    child:DropDownBtn(items:datesList  , onChanged:(value){
+    setState(() {
+       if(value == getTranslated("all", context)){
+         filterList  = shipmentList  ;
+       }
+       else{
+      filterList =
+          shipmentList
+              .where((u) =>
+          (u.date!.toLowerCase().contains(
+              value.toLowerCase())
+          ))
+              .toList();
+      print(filterList.toString());}
+    });
+  }) ),
+
+      Expanded(child: ListView.builder(
      itemBuilder: (context  , index ){
        return
-           ShipmentItem(obj:shipmentList[index]  ,onGet: (var v , bool isAdded){
+           ShipmentItem(obj:filterList[index]  ,onGet: (var v , bool isAdded){
               if(isAdded){
                 selectShipment .add(v)  ;
               }
@@ -86,7 +123,7 @@ getUserData()  ;
 print(selectShipment.toString())  ;
 
 } ,) ;
-     } ,itemCount:  shipmentList.length , )
+     } ,itemCount:  filterList.length , ))]))
        :const NoThingToShow() ,
              bottomNavigationBar:
              shipmentList.isNotEmpty ?BottomAppBar(child: TextButton(child: Text(getTranslated("save", context)??"" , style:  TextStyle(color: Colors.white),),onPressed:onSaveSelectShipment,style: ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,)))):SizedBox()
@@ -125,5 +162,23 @@ onSuccessAdd(String jsons ){
   }
   print(jsonStr) ;
 }
+ /*Widget DropDownBtn(){
+  return DropdownButton<String>(
+   //  value: dropdownvalue,
+    isExpanded: true,
+    items: datesList.map((String value) {
+      return  DropdownMenuItem<String>(
+        value: value,
+        child:  Text(value),
+      );
+    }).toList(),
+   hint:Text( dropdownvalue),
+    onChanged: (string){
+      setState(() {
+        dropdownvalue = string! ;
+        print(string) ;
+      });
+    },
 
+  );}*/
 }

@@ -53,6 +53,7 @@
   "qrcode" : "QRCode"  ,
   "in_customer_location" : "In Customer Location "  ,
   "delivery_methods" : "choose Delivery Method  ",
-  "out_location" : "You Out Customer Location"
+  "out_location" : "You Out Customer Location",
+  "all" : "ALL"
 
 }

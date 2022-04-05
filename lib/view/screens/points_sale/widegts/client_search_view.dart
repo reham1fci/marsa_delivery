@@ -61,7 +61,7 @@ class _ProductSearchViewState extends State<ClientSearchView> {
                   ),
                   decoration: const InputDecoration(
                       prefixIcon:  Icon(Icons.search, color: Colors.white),
-                      hintText: "ابحث اسمه او رقمه...",
+                      hintText: "ابحث اسمه او رقمه او التاريخ ...",
                       hintStyle:  TextStyle(color: Colors.grey)
                   ),
                    onChanged: (string ){

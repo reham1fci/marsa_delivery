@@ -8,6 +8,7 @@ import 'package:marsa_delivery/model/Shipment.dart';
 import 'package:marsa_delivery/model/User.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
+import 'package:marsa_delivery/view/base/dropdown_btn.dart';
 import 'package:marsa_delivery/view/base/no_thing_to_show.dart';
 import 'package:marsa_delivery/view/screens/receipt_delivery/widgets/quantity_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +23,8 @@ class QuantityBody extends StatefulWidget{
 
 class _State extends State<QuantityBody> {
   late List<Shipment> shipmentList  =[];
+  static List<Shipment> filterList  =[];
+  static List<String> datesList  =[];
  bool loading  = true  ;
   User? user  ;
  Api api  = Api() ;
@@ -32,6 +35,9 @@ class _State extends State<QuantityBody> {
     getUserData()  ;
   }
   Future <void> getUserData() async {
+    shipmentList= [] ;
+    datesList=[] ;
+    filterList =  shipmentList ;
     SharedPreferences  shared = await SharedPreferences.getInstance();
     user = User.fromJsonShared(json.decode(shared.getString("user")!));
     Map m  = {"delivery_id":user?.userId} ;
@@ -47,10 +53,17 @@ class _State extends State<QuantityBody> {
     print(jsonObj);
     List<dynamic> list = json.decode(jsonObj);
     print(list);
+    datesList.add(getTranslated("all", context)??"")  ;
+
     for (int i = 0; i < list.length; i++) {
       print(list[i]);
       Shipment ship = Shipment.fromJsonQ(list[i]);
       setState(() {
+        if(datesList.contains(ship.date)){
+        }
+        else{
+          datesList.add(ship.date!) ;
+        }
         shipmentList.add(ship);
       });
     }
@@ -62,12 +75,32 @@ class _State extends State<QuantityBody> {
      return Scaffold(
        backgroundColor:  AppColors.grey,
         appBar: AppBar(backgroundColor: AppColors.colorPrimary,title: Text(getTranslated("qtys", context)??""),),
-        body:   loading ? Center(child:CircularProgressIndicator(color: AppColors.logRed,)): shipmentList.isNotEmpty ? ListView.builder(
+        body:   loading ? Center(child:CircularProgressIndicator(color: AppColors.logRed,)): shipmentList.isNotEmpty ?
+        Container( height :double.infinity,child:   Column(children: [
+        Padding(padding: EdgeInsets.all(10)    ,
+            child:DropDownBtn(items:datesList  , onChanged:(value){
+              setState(() {
+                if(value == getTranslated("all", context)){
+                  filterList  = shipmentList  ;
+                }
+                else{
+                  filterList =
+                      shipmentList
+                          .where((u) =>
+                      (u.date!.toLowerCase().contains(
+                          value.toLowerCase())
+                      ))
+                          .toList();
+                  print(filterList.toString());}
+              });
+            }) ),
+
+       Expanded(child:ListView.builder(
           itemBuilder: (context  , index ){
          return QtyItem(ship: shipmentList[index] ,onTap:  (){
 
          },) ;
-          } ,itemCount:  shipmentList.length , )
+          } ,itemCount:  shipmentList.length , ))]))
             :const NoThingToShow() ,
 
     );
