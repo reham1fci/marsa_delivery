@@ -54,6 +54,8 @@
   "in_customer_location" : "In Customer Location "  ,
   "delivery_methods" : "choose Delivery Method  ",
   "out_location" : "You Out Customer Location",
-  "all" : "ALL"
+  "all" : "ALL",
+  "ship_not_found" : "Ship Not Found",
+  "confirm_ship_not_found" : "Are you sure product not found ?"
 
 }

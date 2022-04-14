@@ -54,7 +54,7 @@
   "in_customer_location" : "ف نطاق موقع العميل "  ,
   "delivery_methods" : "اختر طريقة التسليم ",
   "out_location" : "انت خارج نطاق موقع العميل "  ,
-  "all" : "الكل"
-
-
+  "all" : "الكل",
+  "ship_not_found" : "المنتج غير موجود",
+  "confirm_ship_not_found" : " هل انت متاكد ان المنتج غير موجود؟"
 }

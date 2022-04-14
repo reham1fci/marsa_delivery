@@ -81,7 +81,10 @@ onLongPressStart: (LongPressStartDetails details){
                 double lat  = double.parse(item.lat!) ;
                 double lng  = double.parse(item.lng!) ;
                 MapsLauncher.launchCoordinates(
-                    lat, lng, getTranslated("client_loc", context)) ;
+                    lat, lng, getTranslated("client_loc", context)).then((value) {
+                     print("mab") ;
+                      widget.onRefresh!();
+                });
               }
               else{
                 Navigator.push( context,
@@ -347,7 +350,9 @@ deliveryByQr(s)       ;
     print(jsonObj) ;
     String  msg  = jsonStr['msg']  ;
     if(msg== "تمت عملية اضافة موقع العميل بنجاح") {
-      CustomDialog.dialog(context: context, title: "", message: msg, isCancelBtn: false) ;
+      CustomDialog.dialog(context: context, title: "", message: msg, isCancelBtn: false,onOkClick: (){
+        widget.onRefresh!() ;
+      }) ;
 
     }
     else{

@@ -13,5 +13,6 @@ class Constants{
   static const String getDriverLocation = BASE_URL+'Get_Driver_LatLong_api.php';
   static const String ADD_CustomerLoc = BASE_URL+'Add_Customer_Location_api.php';
   static const String Get_Total = BASE_URL+'Total_Shippments_api.php';
+  static const String SHIP_NOT_FOUND = BASE_URL+'product_notFound_api.php';
 
 }

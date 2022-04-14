@@ -1,12 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/model/Shipment.dart';
+import 'package:marsa_delivery/model/User.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
+import 'package:marsa_delivery/utill/app_constant.dart';
+import 'package:marsa_delivery/view/base/alert_dialog.dart';
 
 class ShipmentItem extends StatefulWidget{
  Function onGet ;
   Shipment obj  ;
-  ShipmentItem({Key? key,  required this.onGet , required this.obj }) : super(key: key);
+   User user ;
+   Function onRefresh ;
+  ShipmentItem({Key? key,  required this.onGet , required this.obj  , required this.user  , required this.onRefresh}) : super(key: key);
 
   @override
   State<ShipmentItem> createState() => _ShipmentItemState();
@@ -15,7 +23,7 @@ class ShipmentItem extends StatefulWidget{
 class _ShipmentItemState extends State<ShipmentItem> {
    Color cardColor  = AppColors.white ;
    List<Shipment> selectedShip  =[] ;
-
+Api api = Api() ; 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -41,6 +49,7 @@ class _ShipmentItemState extends State<ShipmentItem> {
                       style: TextStyle(color: AppColors.logRed),),Text(widget.obj.shipNum!),
                       ]),  Row(children: <Widget>[
                     Text('${getTranslated("qty", context)??""}  :' , style: TextStyle(color: AppColors.logRed),),Text(widget.obj.qty!),
+                Spacer() ,    TextButton(child: Text(getTranslated("ship_not_found", context)??"" , style:  TextStyle(color: Colors.white),),onPressed:onNotFoundShip,style: ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,))),
                       ]),
                 ],),padding: EdgeInsets.all(10.0), ),
 
@@ -77,6 +86,32 @@ class _ShipmentItemState extends State<ShipmentItem> {
   }
 
    }
+onNotFoundShip(){
+CustomDialog.dialog(context: context, title: getTranslated("ship_not_found", context)??"", message: getTranslated("confirm_ship_not_found", context)??"", isCancelBtn: true , onOkClick: (){
+onConfirmShipNotFound() ;
+} , onCancelClick: (){
 
-
+}) ;
+}
+onConfirmShipNotFound(){
+    Map m = widget.obj.toJson() ;
+    m["user_id"] = widget.user.userId ;
+    print(m) ;
+    api.request(url: Constants.SHIP_NOT_FOUND, map: m, onSuccess: onSuccessRequest, onError: onError) ;
+}
+ onSuccessRequest(var jsonObj){
+   var jsonStr = json.decode(jsonObj);
+   print(jsonStr) ;
+   String  msg  = jsonStr['msg']  ;
+   print(msg) ;
+   if(msg== "تمت العملية بنجاح") {
+     CustomDialog.dialog(context: context, title: "", message: msg, isCancelBtn: false , onOkClick: (){
+       widget.onRefresh() ;
+     }) ;
+   }else{
+     CustomDialog.dialog(context: context, title: "", message: msg, isCancelBtn: false) ;
+     }
+ }
+  onError(String err){
+    CustomDialog.dialog(context: context, title: "", message: err, isCancelBtn: false );  }
 }

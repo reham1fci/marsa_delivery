@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
@@ -38,24 +39,46 @@ class _State extends State<DeliveryBody> {
   final GestureDetectorKey = GlobalKey<RawGestureDetectorState>();
   bool loading  = true  ;
   CurrentLoc currentLoc  = CurrentLoc() ;
-  bool firstTime = true  ;
   @override
   void initState() {
     // TODO: implement initState
     filterList  =shipmentList;
 
     super.initState();
-
+handleAppLifecycleState() ;
     getUserData()  ;
   }
+  handleAppLifecycleState() {
+    AppLifecycleState _lastLifecyleState;
+    SystemChannels.lifecycle.setMessageHandler((msg) async {
 
+      print('SystemChannels> $msg');
+
+      switch (msg) {
+        case "AppLifecycleState.paused":
+          _lastLifecyleState = AppLifecycleState.paused;
+          break;
+        case "AppLifecycleState.inactive":
+          _lastLifecyleState = AppLifecycleState.inactive;
+          break;
+        case "AppLifecycleState.resumed":
+          setState(() {
+            getUserData() ;
+
+          });
+          _lastLifecyleState = AppLifecycleState.resumed;
+          print("test back ") ;
+          break;
+        default:
+      }
+    });
+
+  }
   getUserData() async {
     shipmentList= [] ;
     datesList=[] ;
     filterList =  shipmentList ;
-
-    if(firstTime){
-      SharedPreferences  shared = await SharedPreferences.getInstance();
+    SharedPreferences  shared = await SharedPreferences.getInstance();
       user = User.fromJsonShared(json.decode(shared.getString("user")!));
    await currentLoc.getCurrentLocation(onGetLocation:(lat , lng){
       setState(() {
@@ -66,8 +89,7 @@ class _State extends State<DeliveryBody> {
       print(lng)  ;
 
     } );
-   firstTime  = false  ;
-    }
+
     setState(() {
       loading= true ;
 
@@ -122,7 +144,7 @@ setState(() {
     // TODO: implement build
     return
       Scaffold(
-          appBar: AppBar(backgroundColor: AppColors.colorPrimary,title: Text(getTranslated("shipment_delivery", context)??""),),
+          appBar: AppBar(backgroundColor: AppColors.colorPrimary,title: Text(getTranslated("shipment_delivery", context)??""),actions: [IconButton(onPressed: getUserData, icon: Icon(Icons.refresh))],),
           body:  loading? const Center(child:CircularProgressIndicator(color: AppColors.logRed,)):  shipmentList.isNotEmpty ?
           Container( height :double.infinity,child:   Column(children: [
             ClientSearchView(onChanged: (string){
