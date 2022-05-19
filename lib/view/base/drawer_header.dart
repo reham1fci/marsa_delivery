@@ -11,7 +11,7 @@ AppDrawerHeader(this.userName);
   Widget build(BuildContext context) {
     // TODO: implement build
    return  SizedBox(
-       height: 250, child:DrawerHeader(
+       height: 150, child:DrawerHeader(
 
      decoration:  const BoxDecoration(
        color: AppColors.white,
@@ -21,11 +21,11 @@ AppDrawerHeader(this.userName);
            height: 250,
            color: AppColors.white,
            child:
-     Column(
+     Row(
        children: [
          CircleAvatar(
-           radius: 56,
-           child: ClipOval(child: Image.asset(Images.logo  , height: 110)),
+        //   radius: 56,
+           child: ClipOval(child: Image.asset(Images.logo  , height: 70)),
          ) ,
 
          Text(userName! ,style: TextStyle(),)

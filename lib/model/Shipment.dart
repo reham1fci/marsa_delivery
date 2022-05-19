@@ -22,7 +22,13 @@ class Shipment{
 date: json["dis_date"]  , productName: json["product_name"]  , qty:   json["amount_input"] ,
           shipNum:  json["shipp_number"],disId: json["dis_id"]  ,isSelected:  false
 
-      );
+      );}
+    factory Shipment.fromJsonCustomer (Map<String  ,dynamic> json ){
+      return
+        Shipment(
+            date: json["dis_date"]  , productName: json["product_name"]  , qty:   json["total_amount"] ,disId: json["dis_id"]  ,isSelected:  false
+
+        );
   }factory Shipment.fromJsonQ (Map<String  ,dynamic> json ){
     return
       Shipment(

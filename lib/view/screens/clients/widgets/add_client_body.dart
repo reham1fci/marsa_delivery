@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/model/User.dart';
@@ -30,6 +31,7 @@ Api api = Api() ;
   late User user ;
   late SharedPreferences shared ;
   TextEditingController customNumEd  =  TextEditingController()  ;
+  TextEditingController locationEd =  TextEditingController()  ;
   Future <void> getUserData() async {
     shared = await SharedPreferences.getInstance();
     user = User.fromJsonShared(json.decode(shared.getString("user")!));
@@ -44,36 +46,39 @@ Api api = Api() ;
   Widget build(BuildContext context) {
     // TODO: implement build
     return  Scaffold(
-      appBar: AppBar(backgroundColor: AppColors.colorPrimary,title:Text( getTranslated("add_client", context)??"",)) ,
+      appBar: AppBar(
+        iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
+        systemOverlayStyle:const SystemUiOverlayStyle(
+        // Status bar color
+        statusBarColor: AppColors.statusAppBar,),
+        backgroundColor: AppColors.appBar,title:Text( getTranslated("add_client", context)??"",style: const TextStyle(color: AppColors.logRed),) ) ,
 
       body:Center(
 
           child:    SingleChildScrollView(child:   Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+           mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              //  Spacer() ,
-              isLoading? const Center(
-                child: CircularProgressIndicator(),
-              ): const SizedBox(),
-              // Spacer() ,
-              Padding(padding: const EdgeInsets.only(bottom: 20.0) , child: Image.asset(Images.addClient  , height: 120,color: Colors.black, )),
+              isLoading?  CircularProgressIndicator()
+              : const SizedBox(),
+              Padding(padding: const EdgeInsets.only(bottom: 20.0) , child: Image.asset(Images.addClient  , height: 120, )),
 
               EditText(hint: getTranslated("custom_num", context)??"", error: "", image: Icons.person, edTxtController: customNumEd, edTextColor: Colors.black87),
-              AddLocationBtn(onClick:onDefineLocation) ,
-              Text(address) ,
-              CustomBtn(buttonNm: getTranslated("save", context)??"", onClick:onSaveClick ,  backBtn:AppColors.colorPrimary, txtColor: AppColors.white,),
+              EditText(hint: getTranslated("add_location", context)??"", error: "", image: Icons.pin_drop, edTxtController: locationEd, edTextColor: Colors.black87 ,onTap: onDefineLocation,),
+             // Text(address) ,
+          Padding(padding: EdgeInsets.only(top: 30) ,child:    CustomBtn(buttonNm: getTranslated("save", context)??"", onClick:onSaveClick ,  backBtn:AppColors.logRed, txtColor: AppColors.white,),)
 
             ],))),
     );  }
   onDefineLocation ()  {
-
+    print("onlocation") ;
     Navigator.push( context,
         MaterialPageRoute(builder: (context) => PlacePicker())).then((value ){
       setState(() {
         lat =   value["lat"].toString()  ;
         lng =   value["lng"].toString()  ;
         address =   value["address"]  ;
+        locationEd.text = address ;
         print(address) ;
         print(lat) ;
         print(lng) ;

@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_images.dart';
@@ -52,11 +53,16 @@ class _SplashBodyState extends State<SplashBody> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return  Scaffold( backgroundColor: Colors.black,
-    body:Center( child: Column(
+    body:AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: Colors.black,
+
+        ),child:Center( child: Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
     const   Spacer(),
+
     Image.asset(Images.logo,
     fit: BoxFit.cover,
     repeat: ImageRepeat.noRepeat,
@@ -75,6 +81,6 @@ class _SplashBodyState extends State<SplashBody> {
 
 
     ]),
-    ) );
+    ) ));
   }
 }

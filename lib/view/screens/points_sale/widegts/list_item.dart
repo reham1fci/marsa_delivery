@@ -8,6 +8,7 @@ import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/model/point_sale_client.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
+import 'package:marsa_delivery/utill/app_images.dart';
 import 'package:marsa_delivery/view/base/alert_dialog.dart';
 import 'package:marsa_delivery/view/base/map_show.dart';
 import 'package:marsa_delivery/view/screens/PlacePicker/place_picker.dart';
@@ -30,10 +31,13 @@ class _ClientListItemState extends State<ClientListItem> {
     PointSaleClient  client  =  widget.list [widget.index]  ;
     // TODO: implement build
     return   GestureDetector(
-      child: Padding(padding:const EdgeInsets.all(5.0) ,child:Card(
+      child: Padding(padding:const EdgeInsets.all(5.0)
+          ,child:Card(
         color: AppColors.white,
         //RoundedRectangleBorder, BeveledRectangleBorder, StadiumBorder
         shape:  const RoundedRectangleBorder(
+          side: BorderSide(color: AppColors.logRed, width: 1),
+
           borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(10.0),
               top: Radius.circular(10.0)),
@@ -48,7 +52,7 @@ class _ClientListItemState extends State<ClientListItem> {
           Padding(padding: const EdgeInsets.all(5.0) ,child:      Row(
           children: [
            Icon(Icons.phone_android ,color: AppColors.logRed,) , Text(client.phone!) , Spacer()   ,
-            TextButton.icon(icon:Icon(Icons.pin_drop ,color: AppColors.logRed),label: Text(getTranslated("client_loc", context)??"",),onPressed: (){
+            TextButton.icon(icon:Image.asset(Images.location,width: 25,height: 25,),label: Text(getTranslated("client_loc", context)??"",style: TextStyle(color: Colors.black),),onPressed: (){
 
               if(client.lat!.isNotEmpty&& client.lng!.isNotEmpty){
                 double lat  = double.parse(client.lat!) ;

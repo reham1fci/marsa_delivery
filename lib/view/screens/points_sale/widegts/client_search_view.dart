@@ -16,7 +16,7 @@ class ClientSearchView  extends StatefulWidget {
 
 class _ProductSearchViewState extends State<ClientSearchView> {
 
-  Icon actionIcon = const  Icon(Icons.search, color: Colors.white,);
+  Icon actionIcon = const  Icon(Icons.search, color: AppColors.appBarIcon,);
   Widget appBarTitle =  const Center(child:Text("", style:  TextStyle(color: Colors.white),));
   final TextEditingController _searchQuery =  TextEditingController();
   bool? _IsSearching ;
@@ -47,22 +47,22 @@ class _ProductSearchViewState extends State<ClientSearchView> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return   Container( color: AppColors.colorPrimary, width: double.infinity, child:Row(
+    return   Container( color: AppColors.appBar, width: double.infinity, child:Row(
         children: <Widget>[
        Expanded(child:  appBarTitle ,),
            IconButton(icon: actionIcon, onPressed: () {
             setState(() {
               if (actionIcon.icon == Icons.search) {
-               actionIcon =  const Icon(Icons.close, color: Colors.white,);
+               actionIcon =  const Icon(Icons.close, color: AppColors.appBarIcon,);
                 appBarTitle =  TextField(
                   controller: _searchQuery,
                   style: const TextStyle(
-                    color: Colors.white,
+                 //   color: Colors.white,
                   ),
                   decoration: const InputDecoration(
-                      prefixIcon:  Icon(Icons.search, color: Colors.white),
+                      prefixIcon:  Icon(Icons.search, color: AppColors.appBarIcon),
                       hintText: "ابحث اسمه او رقمه او التاريخ ...",
-                      hintStyle:  TextStyle(color: Colors.grey)
+                    //  hintStyle:  TextStyle(color: Colors.grey)
                   ),
                    onChanged: (string ){
                     widget.onChanged(string) ;
@@ -93,7 +93,7 @@ class _ProductSearchViewState extends State<ClientSearchView> {
 
   void _handleSearchEnd() {
     setState(() {
-   actionIcon = const Icon(Icons.search, color: Colors.white,);
+   actionIcon = const Icon(Icons.search, color: AppColors.appBarIcon,);
 appBarTitle =
    const  Center(child:Text("", style:  TextStyle(color: Colors.white),));
       _IsSearching = false;

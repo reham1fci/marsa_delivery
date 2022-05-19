@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/model/User.dart';
+import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,10 +19,11 @@ class _PiChartState extends State<PiChart> {
   Api api = Api() ;
   int trans =0;
   int notTrans  =0 ;
+  bool loading =true  ;
   List<Color> colorList = [
-    Colors.green,
-    Colors.red,
-  ];
+    AppColors.chartRed,
+    AppColors.chartRedDark ,
+    ];
 @override
   void initState() {
     // TODO: implement initState
@@ -40,7 +42,9 @@ class _PiChartState extends State<PiChart> {
   onGetTotalData(var jsonStr){
     var jsonObj = json.decode(jsonStr);
     print(jsonObj) ;
+
     setState(() {
+      loading= false ;
         trans  = jsonObj['Trans_Ship']  ;
         notTrans  = jsonObj['not_tas_ship']  ;
         dataMap.putIfAbsent(" اجمالي الشحنات الغير مسلمه ", () =>notTrans.toDouble());
@@ -59,12 +63,24 @@ class _PiChartState extends State<PiChart> {
     // TODO: implement build
 
 
-  return PieChart(
+  return loading? const Center(
+    child: CircularProgressIndicator(color: AppColors.logRed,),
+  ):Container(
+    //margin: const EdgeInsets.all(15.0),
+    padding: const EdgeInsets.all(3.0),
+    decoration: BoxDecoration(
+      borderRadius:const BorderRadius.vertical(
+    bottom: Radius.circular(10.0),
+      top: Radius.circular(10.0),
+    ) ,
+        border: Border.all(color: AppColors.logRed)) ,
+
+    child: PieChart(
     dataMap: dataMap,
     animationDuration: Duration(milliseconds: 800),
     chartLegendSpacing: 16.0,
     chartRadius: MediaQuery.of(context).size.width / 2.7,
     colorList: colorList,
     chartType: ChartType.disc,
-  ) ;
+  )) ;
 }  }

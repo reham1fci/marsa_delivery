@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/model/Shipment.dart';
@@ -88,8 +89,16 @@ print(datesList) ;
     // TODO: implement build
    return
      Scaffold(
-    appBar: AppBar(backgroundColor: AppColors.colorPrimary,title: Text(getTranslated("shipment_receipt", context)??""),),
-  body:loading? const Center(child:CircularProgressIndicator(color: AppColors.logRed,)): shipmentList.isNotEmpty ?
+         appBar: AppBar(
+             iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
+             centerTitle: true,
+             systemOverlayStyle:const SystemUiOverlayStyle(
+               // Status bar color
+               statusBarColor: AppColors.statusAppBar,),
+             backgroundColor: AppColors.appBar,title:Text( getTranslated("shipment_receipt", context)??"",style: const TextStyle(color: AppColors.logRed),) ) ,
+
+
+         body:loading? const Center(child:CircularProgressIndicator(color: AppColors.logRed,)): shipmentList.isNotEmpty ?
   Container( height :double.infinity,child:   Column(children: [
 Padding(padding: EdgeInsets.all(10)    ,
     child:DropDownBtn(items:datesList  , onChanged:(value){
@@ -122,7 +131,7 @@ Padding(padding: EdgeInsets.all(10)    ,
               }
 print(selectShipment.toString())  ;
 
-} ,user: user!,onRefresh: getUserData,) ;
+} ,user: user!,onRefresh: getUserData,enableBtn: true,) ;
      } ,itemCount:  filterList.length , ))]))
        :const NoThingToShow() ,
              bottomNavigationBar:

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
@@ -46,7 +47,9 @@ class _AddClientsBodyState extends State<AddClientsBody> {
   late SharedPreferences shared ;
    TextEditingController customNumEd  =  TextEditingController()  ;
    TextEditingController customName  =  TextEditingController()  ;
-   TextEditingController customPhone  =  TextEditingController()  ;
+  TextEditingController locationEd =  TextEditingController()  ;
+
+  TextEditingController customPhone  =  TextEditingController()  ;
    Future <void> getUserData() async {
      shared = await SharedPreferences.getInstance();
      user = User.fromJsonShared(json.decode(shared.getString("user")!));
@@ -61,7 +64,12 @@ class _AddClientsBodyState extends State<AddClientsBody> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return  Scaffold(
-      appBar: AppBar(backgroundColor: AppColors.colorPrimary,title:Text( getTranslated("add_client", context)??"",)) ,
+      appBar: AppBar(
+          iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
+          systemOverlayStyle:const SystemUiOverlayStyle(
+            // Status bar color
+            statusBarColor: AppColors.statusAppBar,),
+          backgroundColor: AppColors.appBar,title:Text( getTranslated("add_client", context)??"",style: const TextStyle(color: AppColors.logRed),) ) ,
 
       body:Container(
 
@@ -74,15 +82,15 @@ class _AddClientsBodyState extends State<AddClientsBody> {
                 child: CircularProgressIndicator(),
               ): const SizedBox(),
               // Spacer() ,
-              Padding(padding: const EdgeInsets.only(bottom: 20.0) , child: Image.asset(Images.addClient  , height: 120,color: Colors.black, )),
+              Padding(padding: const EdgeInsets.only(bottom: 20.0) , child: Image.asset(Images.addClient  , height: 120)),
 
               EditText(hint: getTranslated("custom_name", context)??"", error: "", image: Icons.person, edTxtController: customName , edTextColor: Colors.black87),
               EditText(hint: getTranslated("custom_num", context)??"", error: "", image: Icons.person, edTxtController: customNumEd, edTextColor: Colors.black87),
-              EditText(hint: getTranslated("phone", context)??"", error: "", image: Icons.phone_android, edTxtController: customPhone, edTextColor: Colors.black87),
+              EditText(hint: getTranslated("phone", context)??"", error: "", image: Icons.phone, edTxtController: customPhone, edTextColor: Colors.black87),
 
-              AddLocationBtn(onClick:onDefineLocation) ,
-              Text(address) ,
-              CustomBtn(buttonNm: getTranslated("save", context)??"", onClick: onSaveClick ,  backBtn:AppColors.colorPrimary, txtColor: AppColors.white,),
+              EditText(hint: getTranslated("add_location", context)??"", error: "", image: Icons.pin_drop, edTxtController: locationEd, edTextColor: Colors.black87 ,onTap: onDefineLocation,),
+             // Text(address) ,
+           Padding(padding: EdgeInsets.only(top: 30) ,child: CustomBtn(buttonNm: getTranslated("save", context)??"", onClick: onSaveClick ,  backBtn:AppColors.logRed, txtColor: AppColors.white,),)
 
             ],)))),
     );    }
@@ -95,7 +103,9 @@ class _AddClientsBodyState extends State<AddClientsBody> {
            lat =   value["lat"].toString()  ;
            lng =   value["lng"] .toString() ;
            address =   value["address"]  ;
- print(address) ;
+           locationEd.text = address ;
+
+           print(address) ;
  print(lat) ;
  print(lng) ;
            });

@@ -9,9 +9,24 @@ class User {
   String? lat;
   String? lng;
   String? createLocation;
+  String? idNum;
+  String? salary ;
+  String?salaryDate;
+  String? vacation;
+  String? housingAllowance;
+  String? transAllowance;
+  String? passEndDate;
+  String? insuranceCardEndDate;
+  String? insuranceEndDate;
+  String? employeeDate;
+  String? employeeEndDate;
+  String? testPeriod;
+  String? employeeTarget;
+  String? licenceEndDate;
 
 
-  User({this.userId, this.userName, this.userPassword, this.name, this.phone , this.lng , this.lat , this.createLocation});
+  User({this.userId, this.userName, this.userPassword, this.name, this.phone , this.lng , this.lat , this.createLocation,this.employeeDate,this.employeeEndDate,this.email,this.salaryDate
+ , this.employeeTarget ,this.housingAllowance ,this.idNum,this.insuranceCardEndDate,this.insuranceEndDate,this.passEndDate,this.salary,this.testPeriod,this.transAllowance,this.vacation,this.licenceEndDate});
 
   factory User.fromJson (Map<String  ,dynamic> json ,  String password , ){
     return
@@ -22,6 +37,26 @@ class User {
         userId:  json["user_id"]  ,
         name:   json["name"] ,
         userPassword: password  ,
+
+      );
+  } factory User.fromJsonProfile (Map<String  ,dynamic> json  ){
+    return
+      User(
+
+        name: json["name"] ,userId: json["user_id"],
+        vacation: json["employ_vac"]  ,
+        idNum:  json["id_num"]  ,
+        salary:   json["employ_salary"] ,
+        transAllowance: json["trans_allowance"]   ,
+        housingAllowance: json["housing_allowance"] ,
+        employeeDate:json["date_employment"]  ,
+        employeeEndDate:json["work_end_date"]  ,
+        employeeTarget: json["employ_target"] ,
+        insuranceCardEndDate:json["date_insurance_end"]  ,
+        insuranceEndDate:json["date_insurance_end2"]  ,
+        passEndDate: json["date_pass_end"] ,
+        testPeriod:json["fatra_tagreeb"]  ,
+        licenceEndDate: json["date_license_end"]
 
       );
   }
@@ -36,6 +71,24 @@ class User {
 
     );
   }
+  factory User.fromJsonSalary(Map<String  ,dynamic> json ){
+    return User(
+
+      salary: json["salary_safy"] ,
+      salaryDate:   json["date"],
+
+
+    );
+  } factory User.fromJsonEmployee(Map<String  ,dynamic> json ){
+    return User(
+
+      name: json["name"] ,
+      userId:   json["user_id"],
+
+
+    );
+  }
+
   Map<String, dynamic> toJson( ) {
     return {
       "userId": userId,
@@ -65,7 +118,10 @@ class User {
   }
 
   @override
-  String toString() {
-    return 'User{userId: $userId, userName: $userName, userPassword: $userPassword, email: $email, phone: $phone}';
+  String toString() => name!;
+
+  static List<User>? fromJsonList(List list) {
+    if (list == null) return null;
+    return list.map((item) => User.fromJsonEmployee(item)).toList();
   }
 }

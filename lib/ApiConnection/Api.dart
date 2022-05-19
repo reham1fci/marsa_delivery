@@ -15,8 +15,8 @@ class Api {
     print(map) ;
     await http.post(Uri.parse(url) ,body  : map  ) .then((http.Response response) {
       if(response.statusCode == 200) {
-      var jsonStr = json.decode(response.body);
-         print(jsonStr) ;
+      //var jsonStr = json.decode(response.body);
+     //    print(jsonStr) ;
       onSuccess(response.body) ;
 
       }

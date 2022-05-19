@@ -11,21 +11,18 @@ class CustomBtn extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return
-       Padding(
-        padding:
-       const EdgeInsets.only(bottom: 8.0, left: 40.0, right: 40.0, top: 8.0),
-    child: Align(
-    alignment: Alignment.bottomCenter,
-    child:  Container(
+      Center(child:Container(
     decoration:  BoxDecoration(
     color:backBtn,
     borderRadius: const BorderRadius.all(
      Radius.circular(8.0),
     )),
-    width: double.infinity,
+  //  width: double.infinity,
     child:
-
-      TextButton(
+    Padding(
+        padding:
+        const EdgeInsets.only( left: 40.0, right: 40.0, ),
+    child:  TextButton(
       onPressed:()=> onClick(),
 
       child:

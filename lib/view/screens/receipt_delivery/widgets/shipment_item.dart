@@ -12,9 +12,10 @@ import 'package:marsa_delivery/view/base/alert_dialog.dart';
 class ShipmentItem extends StatefulWidget{
  Function onGet ;
   Shipment obj  ;
-   User user ;
+   User? user ;
    Function onRefresh ;
-  ShipmentItem({Key? key,  required this.onGet , required this.obj  , required this.user  , required this.onRefresh}) : super(key: key);
+   bool enableBtn  ;
+  ShipmentItem({Key? key, required this.onGet , required this.obj  ,  this.user  , required this.onRefresh , required this.enableBtn}) : super(key: key);
 
   @override
   State<ShipmentItem> createState() => _ShipmentItemState();
@@ -44,12 +45,14 @@ Api api = Api() ;
                          Align(child:  Text(widget.obj.date!) ,alignment: Alignment.centerRight,),
 
                       ]),
-                  Row(children: <Widget>[
+                  widget.enableBtn?   Row(children: <Widget>[
                     Text('${getTranslated("shipment_num", context)??""}  :' ,
                       style: TextStyle(color: AppColors.logRed),),Text(widget.obj.shipNum!),
-                      ]),  Row(children: <Widget>[
+                      ]):SizedBox(),  Row(children: <Widget>[
                     Text('${getTranslated("qty", context)??""}  :' , style: TextStyle(color: AppColors.logRed),),Text(widget.obj.qty!),
-                Spacer() ,    TextButton(child: Text(getTranslated("ship_not_found", context)??"" , style:  TextStyle(color: Colors.white),),onPressed:onNotFoundShip,style: ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,))),
+                Spacer() ,   widget.enableBtn?  TextButton(child: Text(getTranslated("ship_not_found", context)??"" , style:
+                    TextStyle(color: Colors.white),),onPressed:onNotFoundShip,style:
+                    ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,))):SizedBox(),
                       ]),
                 ],),padding: EdgeInsets.all(10.0), ),
 
@@ -95,7 +98,7 @@ onConfirmShipNotFound() ;
 }
 onConfirmShipNotFound(){
     Map m = widget.obj.toJson() ;
-    m["user_id"] = widget.user.userId ;
+    m["user_id"] = widget.user!.userId! ;
     print(m) ;
     api.request(url: Constants.SHIP_NOT_FOUND, map: m, onSuccess: onSuccessRequest, onError: onError) ;
 }

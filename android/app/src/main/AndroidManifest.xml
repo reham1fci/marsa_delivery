@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.marsa.marsa_delivery">
     <uses-feature android:name="android.hardware.location.network" android:required="false" />
     <uses-feature android:name="android.hardware.location.gps" android:required="false"  />
@@ -8,7 +9,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE "/>
     <application
         android:label="Marsa Delivery"
-        android:name="${applicationName}"
+        tools:replace="android:label"
+         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

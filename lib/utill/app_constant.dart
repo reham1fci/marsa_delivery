@@ -14,5 +14,18 @@ class Constants{
   static const String ADD_CustomerLoc = BASE_URL+'Add_Customer_Location_api.php';
   static const String Get_Total = BASE_URL+'Total_Shippments_api.php';
   static const String SHIP_NOT_FOUND = BASE_URL+'product_notFound_api.php';
+  static const String SHOW_CUSTOM_DETAILS = BASE_URL+'show_customer_info_api.php';
+  static const String ADDCUSTOMERIMAGE = BASE_URL+'Add_customer_location_picture_api.php';
+  static const String PROFILE_URL = BASE_URL+'show_driver_info_api.php';
+  static const String SALARYY= BASE_URL+'salary_details_api.php';
+  static const String SALARYDETAILS = BASE_URL+'show_driver_salary_details_api.php';
+
+  static const String WALlET = BASE_URL+'Wallet_Drivers_Main_api.php';
+  static const String VIOLATION = BASE_URL+'show_driver_car_mokh_api.php';
+  static const String ADD_DISTANCE = BASE_URL+'add_kilo_num_api.php';
+  static const String GETEMPLOYEE = BASE_URL+'Show_Employ_api.php';
+  static const String addCustody = BASE_URL+'tasleem_Financial.api.php';
+  static const String SHOWCUSTODY = BASE_URL+'show_sent_fini_api.php';
+  static const String RECEIVECUSTODY = BASE_URL+'istlam_Financial.api.php';
 
 }

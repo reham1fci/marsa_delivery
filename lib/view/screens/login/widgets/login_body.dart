@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/model/User.dart';
@@ -35,42 +36,56 @@ Api api  = Api() ;
   Widget build(BuildContext context) {
     // TODO: implement build
    return Scaffold(
-     backgroundColor: AppColors.colorPrimary,
 
-     body: Center(
+  //   backgroundColor: AppColors.colorPrimary,
+
+     body:AnnotatedRegion<SystemUiOverlayStyle>(
+       value: SystemUiOverlayStyle(
+         statusBarColor: Colors.white,
+
+       ),child:Center(
 
          child:   Column(
            mainAxisAlignment: MainAxisAlignment.center,
            crossAxisAlignment: CrossAxisAlignment.center,
            children: [
-            //  Spacer() ,
              isLoading? const Center(
                child: CircularProgressIndicator(color: AppColors.logRed,),
              ): const SizedBox(),
-             Padding(padding: const EdgeInsets.only(bottom: 20.0) , child: Image.asset(Images.logo  , height: 200, )),
-            // Spacer() ,
-             EditText(hint: getTranslated("user_name", context)??"", error: "", image:Icons.person, edTxtController: userNameEd , edTextColor: Colors.white),
-             EditText(hint: getTranslated("password", context)??"", error: "", image: Icons.lock, edTxtController: passEd , edTextColor: Colors.white),
-           //   Spacer() ,
-             CustomBtn(buttonNm: getTranslated("login", context)??"", onClick: onLoginBtn ,  backBtn:AppColors.logRed, txtColor: AppColors.white,),
-  Row(children: [
-    Spacer(),
-    TextButton(onPressed: (){
-      Navigator.push( context,
-          MaterialPageRoute(builder: (context) => ForgetPassword())) ;
-    }, child: Text(getTranslated('forget_pass', context)??"" , style:  TextStyle(color:AppColors.white), )) ,
-    Spacer(),
+             Spacer() ,
 
+             Padding(padding: const EdgeInsets.only(bottom: 50.0) , child: Image.asset(Images.sLogo  , height: 150, )),
+             Padding(padding: const EdgeInsets.only(left: 30 , right: 30 ,top: 30),child:Align(
+    alignment: Alignment.centerLeft, child: Text(getTranslated("login", context)??"" ,style: TextStyle(color: AppColors.logRed,fontSize: 20),))) ,
+             EditText(hint: getTranslated("user_name", context)??"", error: "", image:Icons.person, edTxtController: userNameEd , edTextColor: AppColors.logRed),
+             EditText(hint: getTranslated("password", context)??"", error: "", image: Icons.lock, edTxtController: passEd , edTextColor:AppColors.logRed),
+    Padding(
+    padding:
+    const EdgeInsets.only( left: 8, right: 8 ,bottom: 30),child:  Align(
+    alignment: Alignment.centerRight,
+    child:    TextButton(onPressed: (){
+               Navigator.push( context,
+                   MaterialPageRoute(builder: (context) => ForgetPassword())) ;
+             }, child: Text(getTranslated('forget_pass', context)??"" , style:  TextStyle(color:AppColors.colorPrimary), ))) ),
+             CustomBtn(buttonNm: getTranslated("login", context)??"", onClick: onLoginBtn ,  backBtn:AppColors.logRed, txtColor: AppColors.white,),
+
+
+
+         Center(child:    Row(children: [
+           Spacer(),
+
+               Text(getTranslated("haven't_acc", context)??"" ) ,
     TextButton(onPressed: (){
       Navigator.push( context,
           MaterialPageRoute(builder: (context) => Signup())) ;
-    }, child: Text(getTranslated('signup', context)??"" ,  style:  TextStyle(color:AppColors.white))) ,
-    Spacer()
+    }, child: Text(getTranslated('signup', context)??"" ,  style:  TextStyle(color:AppColors.logRed))) ,
+           Spacer()
 
-  ],)
+  ],) ),
+             Spacer()
 
            ],)),
-   );
+   ));
   }
   onLoginBtn(){
     api.checkInternet(onConnect: () {

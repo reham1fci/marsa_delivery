@@ -17,6 +17,7 @@ import 'package:marsa_delivery/view/base/map_show.dart';
 import 'package:marsa_delivery/view/base/reason_dialog.dart';
 import 'package:marsa_delivery/view/base/tost.dart';
 import 'package:marsa_delivery/view/screens/PlacePicker/place_picker.dart';
+import 'package:marsa_delivery/view/screens/receipt_delivery/customer_details.dart';
 import 'package:marsa_delivery/view/screens/receipt_delivery/widgets/delivery_methods.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,12 +72,12 @@ onLongPressStart: (LongPressStartDetails details){
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-         Padding(padding: const EdgeInsets.all(5.0) ,child:  Row( children: [Text(item.customerNm! ,style: TextStyle(fontSize: 17),) ,Spacer() ,Text(item.distanceBetween!.toStringAsFixed(2) +" "+ getTranslated("km", context)!,style: TextStyle(color: AppColors.logRed),)] ) ),
+         Padding(padding: const EdgeInsets.all(5.0) ,child:  Row( children: [TextButton(onPressed: onPressCustomerName, child:Text(item.customerNm! ,style: TextStyle(fontSize: 17,color: Colors.black),) ),Spacer() ,Text(item.distanceBetween!.toStringAsFixed(2) +" "+ getTranslated("km", context)!,style: TextStyle(color: AppColors.logRed),)] ) ),
           Padding(padding: const EdgeInsets.all(5.0) ,child:      Row(
           children: [
            Icon(Icons.phone_android ,color: AppColors.logRed,) , Text(item.customerMobile!)
             , Spacer()   ,
-            TextButton.icon(icon:Icon(Icons.pin_drop ,color: AppColors.logRed),label: Text(getTranslated("client_loc", context)??"",),onPressed: (){
+            TextButton.icon(icon:Icon(Icons.pin_drop ,color: AppColors.logRed),label: Text(getTranslated("client_loc", context)??"",style: TextStyle(color: Colors.black),),onPressed: (){
               if(item.lat!.isNotEmpty&& item.lng!.isNotEmpty){
                 double lat  = double.parse(item.lat!) ;
                 double lng  = double.parse(item.lng!) ;
@@ -113,17 +114,20 @@ onLongPressStart: (LongPressStartDetails details){
       },
     )   ;
   }
-
+onPressCustomerName(){
+  Navigator.push( context,
+      MaterialPageRoute(builder: (context) => CustomerDetails(item.customerID!, item.date!))) ;
+}
   showPopupMenu(Shipment item , Offset offset) {
     PopupMenu menu = PopupMenu(
-      backgroundColor: AppColors.colorPrimary,
+      backgroundColor: AppColors.logRed,
       // lineColor: Colors.tealAccent,
       maxColumn: 2,
 
       context: context,
       items: [
-        MenuItem(title: getTranslated("delivery_done", context), image: Icon(Icons.done, color: Colors.white , )),
-        MenuItem(title:  getTranslated("not_delivered", context), image: Icon(Icons.phonelink_erase_rounded, color: Colors.white,)),
+        MenuItem(title: getTranslated("delivery_done", context), image: Icon(Icons.done, color: Colors.black , )),
+        MenuItem(title:  getTranslated("not_delivered", context), image: Icon(Icons.phonelink_erase_rounded, color: Colors.black,)),
       ],
       onClickMenu: (MenuItemProvider menuItem){
         if(menuItem.menuTitle ==  getTranslated("delivery_done", context) ) {

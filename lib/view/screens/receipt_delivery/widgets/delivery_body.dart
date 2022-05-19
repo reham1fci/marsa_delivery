@@ -144,8 +144,16 @@ setState(() {
     // TODO: implement build
     return
       Scaffold(
-          appBar: AppBar(backgroundColor: AppColors.colorPrimary,title: Text(getTranslated("shipment_delivery", context)??""),actions: [IconButton(onPressed: getUserData, icon: Icon(Icons.refresh))],),
-          body:  loading? const Center(child:CircularProgressIndicator(color: AppColors.logRed,)):  shipmentList.isNotEmpty ?
+        appBar: AppBar(
+            iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
+            centerTitle: true,
+            systemOverlayStyle:const SystemUiOverlayStyle(
+              // Status bar color
+              statusBarColor: AppColors.statusAppBar,),
+            backgroundColor: AppColors.appBar,title:Text( getTranslated("shipment_delivery", context)??"",style: const TextStyle(color: AppColors.logRed),) ) ,
+
+
+        body:  loading? const Center(child:CircularProgressIndicator(color: AppColors.logRed,)):  shipmentList.isNotEmpty ?
           Container( height :double.infinity,child:   Column(children: [
             ClientSearchView(onChanged: (string){
               setState(() {

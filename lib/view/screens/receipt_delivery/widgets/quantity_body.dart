@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/model/Shipment.dart';
@@ -73,9 +74,15 @@ class _State extends State<QuantityBody> {
   Widget build(BuildContext context) {
     // TODO: implement build
      return Scaffold(
-       backgroundColor:  AppColors.grey,
-        appBar: AppBar(backgroundColor: AppColors.colorPrimary,title: Text(getTranslated("qtys", context)??""),),
-        body:   loading ? Center(child:CircularProgressIndicator(color: AppColors.logRed,)): shipmentList.isNotEmpty ?
+         appBar: AppBar(
+           iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
+           centerTitle: true,
+           systemOverlayStyle:const SystemUiOverlayStyle(
+             // Status bar color
+             statusBarColor: AppColors.statusAppBar,),
+           backgroundColor: AppColors.appBar,title:Text( getTranslated("qtys", context)??"",style: const TextStyle(color: AppColors.logRed),) ) ,
+
+       body:   loading ? Center(child:CircularProgressIndicator(color: AppColors.logRed,)): shipmentList.isNotEmpty ?
         Container( height :double.infinity,child:   Column(children: [
         Padding(padding: EdgeInsets.all(10)    ,
             child:DropDownBtn(items:datesList  , onChanged:(value){
