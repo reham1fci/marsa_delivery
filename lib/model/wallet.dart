@@ -23,4 +23,13 @@ date:json["process_date"],
 
     );
   }
+  factory Wallet.fromJsonCustody(Map<String  ,dynamic> json ){
+    return Wallet(
+
+      balance:   json["raseed"],
+      credit:   json["daen"],
+      debit:   json["madeen"],
+
+    );
+  }
 }

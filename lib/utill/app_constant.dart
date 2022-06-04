@@ -27,5 +27,9 @@ class Constants{
   static const String addCustody = BASE_URL+'tasleem_Financial.api.php';
   static const String SHOWCUSTODY = BASE_URL+'show_sent_fini_api.php';
   static const String RECEIVECUSTODY = BASE_URL+'istlam_Financial.api.php';
+  static const String SHOWTOTALCUSTODY = BASE_URL+'show_financial_covenant_api.php';
+  static const String RETURNSHIP = BASE_URL+'Return_Shipments_api.php';
+  static const String RETURNSHIPDET = BASE_URL+'Return_Shipments_Details_api.php';
+  static const String RECEIPTRETURNSHIP = BASE_URL+'Istlam_Ragee_api.php';
 
 }

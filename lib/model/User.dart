@@ -23,10 +23,11 @@ class User {
   String? testPeriod;
   String? employeeTarget;
   String? licenceEndDate;
+  String? shipmentQty  ;
 
 
   User({this.userId, this.userName, this.userPassword, this.name, this.phone , this.lng , this.lat , this.createLocation,this.employeeDate,this.employeeEndDate,this.email,this.salaryDate
- , this.employeeTarget ,this.housingAllowance ,this.idNum,this.insuranceCardEndDate,this.insuranceEndDate,this.passEndDate,this.salary,this.testPeriod,this.transAllowance,this.vacation,this.licenceEndDate});
+ , this.employeeTarget ,this.housingAllowance ,this.idNum,this.insuranceCardEndDate,this.insuranceEndDate,this.passEndDate,this.salary,this.testPeriod,this.transAllowance,this.vacation,this.licenceEndDate ,this.shipmentQty});
 
   factory User.fromJson (Map<String  ,dynamic> json ,  String password , ){
     return
@@ -84,6 +85,16 @@ class User {
 
       name: json["name"] ,
       userId:   json["user_id"],
+
+
+    );
+  }
+factory User.fromJsonReturn(Map<String  ,dynamic> json ){
+    return User(
+
+      name: json["driver_name"] ,
+      shipmentQty:   json["amount"],
+      userId:   json["delivery_id"],
 
 
     );

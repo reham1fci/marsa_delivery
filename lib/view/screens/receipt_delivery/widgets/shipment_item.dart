@@ -18,15 +18,18 @@ class ShipmentItem extends StatefulWidget{
   ShipmentItem({Key? key, required this.onGet , required this.obj  ,  this.user  , required this.onRefresh , required this.enableBtn}) : super(key: key);
 
   @override
-  State<ShipmentItem> createState() => _ShipmentItemState();
+  State<ShipmentItem> createState() => ShipmentItemState();
 }
 
-class _ShipmentItemState extends State<ShipmentItem> {
+class ShipmentItemState extends State<ShipmentItem> {
    Color cardColor  = AppColors.white ;
    List<Shipment> selectedShip  =[] ;
 Api api = Api() ; 
   @override
   Widget build(BuildContext context) {
+    if(widget.obj.isSelected!){cardColor =AppColors.grey ;}
+    else{cardColor=AppColors.white;
+    }
     // TODO: implement build
     return  GestureDetector(
         onTap:onTap ,
@@ -56,7 +59,7 @@ Api api = Api() ;
                       ]),
                 ],),padding: EdgeInsets.all(10.0), ),
 
-              color: cardColor ,
+              color:cardColor ,
               //RoundedRectangleBorder, BeveledRectangleBorder, StadiumBorder
               shape:const  RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
@@ -89,6 +92,13 @@ Api api = Api() ;
   }
 
    }
+   changeCardColor(){
+    setState(() {
+      cardColor=AppColors.grey;
+
+    });
+   }
+
 onNotFoundShip(){
 CustomDialog.dialog(context: context, title: getTranslated("ship_not_found", context)??"", message: getTranslated("confirm_ship_not_found", context)??"", isCancelBtn: true , onOkClick: (){
 onConfirmShipNotFound() ;

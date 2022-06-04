@@ -4,7 +4,9 @@ import 'package:maps_launcher/maps_launcher.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/model/point_sale_client.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
+import 'package:marsa_delivery/utill/app_images.dart';
 import 'package:marsa_delivery/view/screens/PlacePicker/place_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomerCard extends StatefulWidget{
   PointSaleClient client  ;
@@ -39,8 +41,16 @@ class _CustomerCardState extends State<CustomerCard> {
                        ] ) ),
                Padding(padding: const EdgeInsets.all(5.0) ,child:
                Row(children: [
-                   Icon(Icons.phone_android ,color: AppColors.logRed,) , Text(widget.client.phone!)
-                   , Spacer()   ,
+                 IconButton(onPressed: () async {
+                   var whatsappUrl ="whatsapp://send?phone=${widget.client.phone}";
+                   // await canLaunch(whatsappUrl)?
+                   launch(whatsappUrl);
+                   //  :print("open whatsapp app link or do a snackbar with notification that there is no whatsapp installed");
+                 }, icon: Image.asset(Images.whatsapp),),
+                 TextButton.icon(icon:  Icon(Icons.phone_android ,color: AppColors.logRed,) ,label: Text(widget.client.phone!,style: TextStyle(color: Colors.black)) ,onPressed: (){
+                   launch(('tel://${widget.client.phone}'));
+
+                 },)                   , Spacer()   ,
                    TextButton.icon(icon:Icon(Icons.pin_drop ,color: AppColors.logRed),label: Text(getTranslated("client_loc", context)??"",),onPressed: (){
                      if(widget.client.lat!.isNotEmpty&& widget.client.lng!.isNotEmpty){
                        double lat  = double.parse(widget.client.lat!) ;
@@ -63,6 +73,7 @@ class _CustomerCardState extends State<CustomerCard> {
                        } );
                      }
                    },)],) ) ,
+
              ],)),
 
      )) ,

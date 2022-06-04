@@ -5,19 +5,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:upgrader/upgrader.dart';
 import 'localization/app_localization.dart';
 import 'view/screens/splash/splash_view.dart';
 
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'package:background_fetch/background_fetch.dart';
 
 // [Android-only] This "Headless Task" is run when the Android app
 // is terminated with enableHeadless: true
-void backgroundFetchHeadlessTask(HeadlessTask task) async {
+/*void backgroundFetchHeadlessTask(HeadlessTask task) async {
   String taskId = task.taskId;
   bool isTimeout = task.timeout;
   if (isTimeout) {
@@ -30,7 +24,7 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
   print('[BackgroundFetch] Headless event received.');
   // Do your work here...
   BackgroundFetch.finish(taskId);
-}
+}*/
 void main(){
   runApp(
    MyApp()

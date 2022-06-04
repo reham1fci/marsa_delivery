@@ -22,6 +22,7 @@ import 'package:marsa_delivery/view/screens/receipt_delivery/widgets/delivery_me
 import 'package:popup_menu/popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class DeliveryItem extends StatefulWidget{
@@ -75,7 +76,10 @@ onLongPressStart: (LongPressStartDetails details){
          Padding(padding: const EdgeInsets.all(5.0) ,child:  Row( children: [TextButton(onPressed: onPressCustomerName, child:Text(item.customerNm! ,style: TextStyle(fontSize: 17,color: Colors.black),) ),Spacer() ,Text(item.distanceBetween!.toStringAsFixed(2) +" "+ getTranslated("km", context)!,style: TextStyle(color: AppColors.logRed),)] ) ),
           Padding(padding: const EdgeInsets.all(5.0) ,child:      Row(
           children: [
-           Icon(Icons.phone_android ,color: AppColors.logRed,) , Text(item.customerMobile!)
+          TextButton.icon(icon:  Icon(Icons.phone_android ,color: AppColors.logRed,) ,label: Text(item.customerMobile!,style: TextStyle(color: Colors.black)) ,onPressed: (){
+            launch(('tel://${item.customerMobile}'));
+
+          },)
             , Spacer()   ,
             TextButton.icon(icon:Icon(Icons.pin_drop ,color: AppColors.logRed),label: Text(getTranslated("client_loc", context)??"",style: TextStyle(color: Colors.black),),onPressed: (){
               if(item.lat!.isNotEmpty&& item.lng!.isNotEmpty){

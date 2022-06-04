@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/model/User.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
+import 'package:marsa_delivery/view/base/bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileBody extends StatefulWidget{
@@ -56,9 +58,15 @@ class _ProfileBodyState extends State<ProfileBody> {
   Widget build(BuildContext context) {
     // TODO: implement build
 return Scaffold(
+    bottomNavigationBar: AppBottomNavBar(4),
+
     appBar: AppBar(
-    backgroundColor: AppColors.colorPrimary  ,
-    title: Text(getTranslated("profile", context)??"")),
+        iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
+        systemOverlayStyle:const SystemUiOverlayStyle(
+          // Status bar color
+          statusBarColor: AppColors.statusAppBar,),
+        backgroundColor: AppColors.appBar,title:Text( getTranslated("profile", context)??"",style: const TextStyle(color: AppColors.logRed),) ),
+
     body:loading ?const Center(
       child: CircularProgressIndicator(color: AppColors.logRed,),
     ): Table(

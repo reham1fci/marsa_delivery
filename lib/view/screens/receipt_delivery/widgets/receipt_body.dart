@@ -36,7 +36,8 @@ class _State extends State<ReceiptBody> {
   bool loading  = true  ;
 String dropdownvalue  = "اختر التاريخ" ;
   final GestureDetectorKey = GlobalKey<RawGestureDetectorState>();
-
+   bool isSelectAll =false ;
+   String status ="" ;
   @override
   void initState() {
     // TODO: implement initState
@@ -51,6 +52,9 @@ getUserData()  ;
 
      SharedPreferences  shared = await SharedPreferences.getInstance();
        user = User.fromJsonShared(json.decode(shared.getString("user")!));
+       setState(() {
+         status  = shared.getString("attend")! ;
+       });
    Map m  = {"delivery_id":user?.userId} ;
     await api.request(url: Constants.Receipt_URl, map: m, onSuccess: onGetRequest, onError: (err){
 
@@ -117,6 +121,24 @@ Padding(padding: EdgeInsets.all(10)    ,
       print(filterList.toString());}
     });
   }) ),
+    CheckboxListTile(
+      title: Text(getTranslated("select_all", context)??""),
+      value: isSelectAll,
+     checkColor: AppColors.logRed,
+activeColor: AppColors.appBarIcon,
+      onChanged: (newValue) {
+        setState(() {
+          isSelectAll = newValue!;
+          if(isSelectAll){
+            selectAll() ;
+          }
+          else {
+            unSelectAll() ;
+          }
+        });
+      },
+      controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+    ),
 
       Expanded(child: ListView.builder(
      itemBuilder: (context  , index ){
@@ -135,11 +157,12 @@ print(selectShipment.toString())  ;
      } ,itemCount:  filterList.length , ))]))
        :const NoThingToShow() ,
              bottomNavigationBar:
-             shipmentList.isNotEmpty ?BottomAppBar(child: TextButton(child: Text(getTranslated("save", context)??"" , style:  TextStyle(color: Colors.white),),onPressed:onSaveSelectShipment,style: ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,)))):SizedBox()
+             shipmentList.isNotEmpty ?BottomAppBar(child: TextButton(child: Text(getTranslated("receive", context)??"" , style:  TextStyle(color: Colors.white),),onPressed:onSaveSelectShipment,style: ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,)))):SizedBox()
 
      );
 }
  onSaveSelectShipment (){
+    if(status == "active") {
    var map =  <String, dynamic>{};
 map["user_id"]  = user?.userId  ;
    List itemsMap = < Map<String, dynamic>>[];
@@ -150,7 +173,11 @@ map["user_id"]  = user?.userId  ;
 
    map["list"] = itemsMap ;
 api.request2(url: Constants.SELECT_RECEIPT, map: map , onSuccess: onSuccessAdd, onError: (err){print(err);}) ;
+}
+    else{
+      CustomDialog.dialog(context: context, title: getTranslated("error" , context)??"error", message: getTranslated("key", context)??"", isCancelBtn: false) ;
 
+    }
 
  }
 onSuccessAdd(String jsons ){
@@ -171,6 +198,30 @@ onSuccessAdd(String jsons ){
   }
   print(jsonStr) ;
 }
+selectAll(){
+    setState(() {
+     // ShipmentItemState().changeCardColor() ;
+      for(int i=0  ; i<shipmentList.length;i++){
+        shipmentList[i].isSelected=true  ;
+        selectShipment.add(shipmentList[i]) ;
+      }
+      //selectShipment =selectShipment ;
+    });
+
+
+}
+  unSelectAll(){
+    setState(() {
+      // ShipmentItemState().changeCardColor() ;
+      for(int i=0  ; i<shipmentList.length;i++){
+        shipmentList[i].isSelected=false  ;
+      }
+      selectShipment= [] ;
+      //selectShipment =selectShipment ;
+    });
+
+
+  }
  /*Widget DropDownBtn(){
   return DropdownButton<String>(
    //  value: dropdownvalue,

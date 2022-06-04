@@ -39,22 +39,23 @@ Api api  = Api() ;
 
   //   backgroundColor: AppColors.colorPrimary,
 
-     body:AnnotatedRegion<SystemUiOverlayStyle>(
+     body:
+     AnnotatedRegion<SystemUiOverlayStyle>(
        value: SystemUiOverlayStyle(
          statusBarColor: Colors.white,
 
        ),child:Center(
-
-         child:   Column(
-           mainAxisAlignment: MainAxisAlignment.center,
-           crossAxisAlignment: CrossAxisAlignment.center,
+    child:  SingleChildScrollView(child:   Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
            children: [
+
              isLoading? const Center(
                child: CircularProgressIndicator(color: AppColors.logRed,),
              ): const SizedBox(),
-             Spacer() ,
+          //  Spacer() ,
 
-             Padding(padding: const EdgeInsets.only(bottom: 50.0) , child: Image.asset(Images.sLogo  , height: 150, )),
+             Padding(padding: const EdgeInsets.only(bottom: 50.0 ,top: 50) , child: Image.asset(Images.sLogo  , height: 150, )),
              Padding(padding: const EdgeInsets.only(left: 30 , right: 30 ,top: 30),child:Align(
     alignment: Alignment.centerLeft, child: Text(getTranslated("login", context)??"" ,style: TextStyle(color: AppColors.logRed,fontSize: 20),))) ,
              EditText(hint: getTranslated("user_name", context)??"", error: "", image:Icons.person, edTxtController: userNameEd , edTextColor: AppColors.logRed),
@@ -72,7 +73,7 @@ Api api  = Api() ;
 
 
          Center(child:    Row(children: [
-           Spacer(),
+         Spacer(),
 
                Text(getTranslated("haven't_acc", context)??"" ) ,
     TextButton(onPressed: (){
@@ -82,10 +83,10 @@ Api api  = Api() ;
            Spacer()
 
   ],) ),
-             Spacer()
+          //   Spacer()
 
            ],)),
-   ));
+   )));
   }
   onLoginBtn(){
     api.checkInternet(onConnect: () {

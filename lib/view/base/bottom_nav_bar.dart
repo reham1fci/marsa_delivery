@@ -8,7 +8,14 @@ import 'package:marsa_delivery/view/screens/main_screen/salary_view.dart';
 import 'package:marsa_delivery/view/screens/main_screen/user_profile.dart';
 import 'package:marsa_delivery/view/screens/main_screen/violation_view.dart';
 import 'package:marsa_delivery/view/screens/main_screen/wallet_view.dart';
-class AppBottomNavBar extends StatefulWidget{
+import 'package:marsa_delivery/view/screens/profile/profile_view.dart';
+class AppBottomNavBar extends StatefulWidget {
+
+int? selectedIndex;
+
+
+AppBottomNavBar(this.selectedIndex);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -17,7 +24,7 @@ class AppBottomNavBar extends StatefulWidget{
 
 }
 class _State extends State<AppBottomNavBar> {
-  int _selectedIndex=0;
+  //int _selectedIndex=0;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -62,7 +69,7 @@ return  BottomNavigationBar(
   ],
   showUnselectedLabels: true,
   showSelectedLabels: true,
-  currentIndex: _selectedIndex,
+  currentIndex: widget.selectedIndex!,
   unselectedItemColor: Colors.grey,
   selectedItemColor: AppColors.logRed,
   onTap: _onTap,
@@ -71,23 +78,23 @@ return  BottomNavigationBar(
 
     void _onTap(int index)
     {
-      _selectedIndex = index;
+      widget.selectedIndex = index;
       setState(() {
 switch(index){
   case 0:
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Main()),);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Main()),);
     break;
   case 1:
-    Navigator.push(context, MaterialPageRoute(builder: (context) => WalletView()),);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WalletView()),);
     break;
   case 2:
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ViolationView()),);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ViolationView()),);
     break;
   case 3:
-    Navigator.push(context, MaterialPageRoute(builder: (context) => SalaryView()),);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SalaryView()),);
     break;
   case 4:
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()),);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileView()),);
     break;
 }
       });

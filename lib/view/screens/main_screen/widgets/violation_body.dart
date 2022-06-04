@@ -10,6 +10,7 @@ import 'package:marsa_delivery/model/violation.dart';
 import 'package:marsa_delivery/model/wallet.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
+import 'package:marsa_delivery/view/base/bottom_nav_bar.dart';
 import 'package:marsa_delivery/view/base/no_thing_to_show.dart';
 import 'package:marsa_delivery/view/screens/main_screen/widgets/violation_item.dart';
 import 'package:marsa_delivery/view/screens/main_screen/widgets/wallet_item.dart';
@@ -68,6 +69,8 @@ class _State extends State<ViolationBody> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return   Scaffold(
+      bottomNavigationBar: AppBottomNavBar(2),
+
       appBar: AppBar(
           iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
           systemOverlayStyle:const SystemUiOverlayStyle(

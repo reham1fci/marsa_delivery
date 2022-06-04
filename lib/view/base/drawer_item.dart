@@ -13,17 +13,17 @@ class DrawerItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return  ListTile(
+    return Padding(padding: EdgeInsets.only(top: 10 , bottom: 10), child:ListTile(
       title: Row(
         children: <Widget>[
           Padding(padding: EdgeInsets.only(left: 5), child: icon),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: Text(text ),
+            child: Text(getTranslated(text, context)??"" ),
           )
         ],
       ),
       onTap:()=> onTap()
-    );
+    ));
   }
   }

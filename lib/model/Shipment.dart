@@ -11,11 +11,14 @@ class Shipment{
     String?customerMobile  ;
     String?customerID   ;
     double?distanceBetween;
+    String?driverID;
+    String?driverNm;
+int? type  ;
 
 
   Shipment({this.date, this.productName, this.shipNum, this.qty ,this.disId ,
     this.isSelected , this.customerID , this.customerMobile , this.customerNm
-  ,this.lat , this.lng});
+  ,this.lat , this.lng ,this.driverID , this.driverNm,this.type});
   factory Shipment.fromJson (Map<String  ,dynamic> json ){
     return
       Shipment(
@@ -44,6 +47,18 @@ disId: json["dis_id"]  , productName: json["product_name"]  , qty:   json["total
         lng:  json["lng"] , lat:  json["lat"] , customerID: json["customer_id"]  , customerMobile:json["customer_mobile"]   ,
           customerNm:  json["customer_name"] ,
           date: json["dis_date"]
+
+      );
+  }factory Shipment.fromJsonReturn (Map<String  ,dynamic> json ){
+    return
+      Shipment(
+          disId: json["dis_id"]  ,
+          productName: json["product_name"]  ,
+          qty:   json["amount"] ,
+          driverNm:  json["driver_name"] ,
+          date: json["dis_date"],
+        type: json["type"],
+
 
       );
   }

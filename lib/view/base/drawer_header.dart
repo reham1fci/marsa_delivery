@@ -10,7 +10,7 @@ AppDrawerHeader(this.userName);
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-   return  SizedBox(
+   return  Padding(padding: EdgeInsets.all(15) ,child:SizedBox(
        height: 150, child:DrawerHeader(
 
      decoration:  const BoxDecoration(
@@ -31,5 +31,5 @@ AppDrawerHeader(this.userName);
          Text(userName! ,style: TextStyle(),)
        ],
      ),
-         ) ,));
+         ) ,)));
 }}

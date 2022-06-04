@@ -8,9 +8,13 @@ import 'package:marsa_delivery/model/User.dart';
 import 'package:marsa_delivery/model/salary.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
+import 'package:marsa_delivery/view/base/bottom_nav_bar.dart';
+import 'package:marsa_delivery/view/base/custom_button.dart';
 import 'package:marsa_delivery/view/base/no_thing_to_show.dart';
 import 'package:marsa_delivery/view/screens/main_screen/widgets/salary_details.dart';
 import 'package:marsa_delivery/view/screens/main_screen/widgets/salary_item.dart';
+import 'package:marsa_delivery/view/screens/requests/add_holiday_request.dart';
+import 'package:marsa_delivery/view/screens/requests/financial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class SalaryBody extends StatefulWidget{
   @override
@@ -69,7 +73,9 @@ class _State extends State<SalaryBody> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return   Scaffold(
-        appBar: AppBar(
+      bottomNavigationBar: AppBottomNavBar(3),
+
+      appBar: AppBar(
         iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
     systemOverlayStyle:const SystemUiOverlayStyle(
     // Status bar color
@@ -77,15 +83,25 @@ class _State extends State<SalaryBody> {
         backgroundColor: AppColors.appBar,title:Text( getTranslated("salary", context)??"",style: const TextStyle(color: AppColors.logRed),) ),
 
     body:  loading? const Center (child:CircularProgressIndicator(color: AppColors.logRed,)) :
+    Container( height :double.infinity,child:
+    Column(children: [
          salaryList.isNotEmpty?
-       ListView.builder(
+
+         Expanded(child:ListView.builder(
       itemBuilder: (context  , index ){
         return SalaryItem(userSalary: salaryList[index],index:index ,onTap: (){
           Navigator.push( context,
               MaterialPageRoute(builder: (context) => SalaryDetails(s!))) ;
         },);
-      } ,itemCount:  salaryList.length , )
-    :NoThingToShow(),);
+      } ,itemCount:  salaryList.length , ))
+    :Expanded(child:NoThingToShow()),
+     Padding(padding: EdgeInsets.only(bottom: 40 ,top: 40) , child: CustomBtn(buttonNm:
+     getTranslated("financial_advance", context)??"", onClick: (){
+       Navigator.push( context,
+           MaterialPageRoute(builder: (context) => AddHolidayReq())) ;
+     } ,  backBtn:AppColors.logRed, txtColor: AppColors.white,),
+     )
+    ])));
   }
 
 }

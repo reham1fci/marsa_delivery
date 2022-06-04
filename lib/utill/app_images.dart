@@ -12,6 +12,7 @@ class Images {
   static const String profile = 'assets/images/profile.png';
   static const String addClient = 'assets/images/add_client.png';
   static const String location = 'assets/images/location.png';
+  static const String location2 = 'assets/images/location2.png';
   static const String money = 'assets/images/money.png';
   static const String date = 'assets/images/date.png';
   static const String custody = 'assets/images/custody.png';
@@ -19,4 +20,9 @@ class Images {
   static const String point_sale = 'assets/images/point_sale.png';
   static const String receipt_delivery = 'assets/images/delivery_receipt.png';
   static const String attendance = 'assets/images/attendance.png';
+  static const String contact = 'assets/images/contact.png';
+  static const String performance = 'assets/images/performance.png';
+  static const String car = 'assets/images/car.png';
+  static const String whatsapp = 'assets/images/whatsapp.png';
+  static const String returnImg = 'assets/images/return.png';
 }

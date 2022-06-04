@@ -106,7 +106,29 @@
   "from": "from",
   "receive": "receive",
   "change_status" : "change your status",
-  "active" : "Active"
+  "active" : "Active",
+  "active_title" : "you're in work right now",
+  "track_location": "Marsa delivery collects location data \n to enable shipment delivery tracking \n and to calculate distance even when the app is closed or not in use.",
+  "personal_info": "Personal Information",
+  "job_info": "Job Information",
+  "add_info": "Additional Information",
+  "select_all": "Select All",
+  "allow": "Allow",
+  "deny": "Deny",
+  "return": "return",
+  "mange_return": " return management ",
+  "product_name": "Product Name",
+  "num": "Number",
+  "add":"Add",
+  "request": "Request",
+  "financial_advance": "Financial Advance",
+  "req_reason": "Reason of request",
+  "money_req": "Money required",
+  "date": "Date",
+  "to" : "To",
+  "receive_return": "Receive Return"
+
+
 
 
 

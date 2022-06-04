@@ -129,7 +129,7 @@ handleAppLifecycleState() ;
         shipmentList.add(ship) ;
 
       });
-
+print(filterList.length) ;
    }
 setState(() {
  // shipmentList.sort((a, b) => b.distanceBetween!.compareTo(a.distanceBetween!));
@@ -145,6 +145,7 @@ setState(() {
     return
       Scaffold(
         appBar: AppBar(
+          actions: [IconButton(onPressed: getUserData, icon: Icon(Icons.refresh))],
             iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
             centerTitle: true,
             systemOverlayStyle:const SystemUiOverlayStyle(

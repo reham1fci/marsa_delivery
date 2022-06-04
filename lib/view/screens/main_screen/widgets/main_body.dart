@@ -13,6 +13,8 @@ import 'package:marsa_delivery/view/base/bottom_nav_bar.dart';
 import 'package:marsa_delivery/view/base/custom_button.dart';
 import 'package:marsa_delivery/view/base/drawer.dart';
 import 'package:marsa_delivery/view/base/get_current_location.dart';
+import 'package:marsa_delivery/view/screens/Attendance/active_view.dart';
+import 'package:marsa_delivery/view/screens/Attendance/leave_view.dart';
 import 'package:marsa_delivery/view/screens/clients/clients.dart';
 import 'package:marsa_delivery/view/screens/custody/custody_delivery.dart';
 import 'package:marsa_delivery/view/screens/custody/custody_receive.dart';
@@ -23,6 +25,7 @@ import 'package:marsa_delivery/view/screens/main_screen/wallet_view.dart';
 import 'package:marsa_delivery/view/screens/main_screen/widgets/pi_chart.dart';
 import 'package:marsa_delivery/view/screens/points_sale/show_clients_view.dart';
 import 'package:marsa_delivery/view/screens/receipt_delivery/receipt_delivery.dart';
+import 'package:marsa_delivery/view/screens/return/delivery_shipment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainBody extends StatefulWidget{
@@ -33,20 +36,35 @@ class MainBody extends StatefulWidget{
 }
 
 class _MainBodyState extends State<MainBody> {
+
   CurrentLoc currentLoc  = CurrentLoc() ;
   Api api = Api() ;
-
+  String? status  ;
+  SharedPreferences?  shared ;
+  bool returnView  = true ;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-getUserData() ;
+    handleAppLifecycleState() ;
+
+    getUserData() ;
 
   }
   getUserData() async {
-    SharedPreferences  shared = await SharedPreferences.getInstance();
-   User user = User.fromJsonShared(json.decode(shared.getString("user")!));
-
+      shared = await SharedPreferences.getInstance();
+   User user = User.fromJsonShared(json.decode(shared!.getString("user")!));
+      if(shared!.containsKey("attend")){
+        setState(() {
+          status = getTranslated(shared!.getString("attend")!, context);
+        });
+      }
+      else{
+        setState(() {
+          status = getTranslated("leave", context);
+          shared!.setString("attend", "leave") ;
+        });
+      }
 
     currentLoc.getCurrentLocation(onGetLocation:(lat , lng){
       print(lat);
@@ -60,7 +78,47 @@ api.request(url: Constants.getDriverLocation, map: user.addLocationToMap(), onSu
     } );
 
   }
+  setStatus() async {
+    shared = await SharedPreferences.getInstance();
 
+    if (shared!.containsKey("attend")) {
+      setState(() {
+        status = getTranslated(shared!.getString("attend")!, context);
+      });
+    }
+    else {
+      setState(() {
+        status = getTranslated("leave", context);
+        shared!.setString("attend", "leave");
+      });
+    }
+  }
+  handleAppLifecycleState() {
+    AppLifecycleState _lastLifecyleState;
+    SystemChannels.lifecycle.setMessageHandler((msg) async {
+
+      print('SystemChannels> $msg');
+
+      switch (msg) {
+        case "AppLifecycleState.paused":
+          _lastLifecyleState = AppLifecycleState.paused;
+          break;
+        case "AppLifecycleState.inactive":
+          _lastLifecyleState = AppLifecycleState.inactive;
+          break;
+        case "AppLifecycleState.resumed":
+          setState(() {
+            setStatus() ;
+
+          });
+          _lastLifecyleState = AppLifecycleState.resumed;
+          print("test back ") ;
+          break;
+        default:
+      }
+    });
+
+  }
    onLocationAdded( var jsonObj){
     print(jsonObj) ;
    }
@@ -114,15 +172,55 @@ return Scaffold(
                crossAxisAlignment: CrossAxisAlignment.end,
                children: [
 
-            Padding(padding: EdgeInsets.all(15) , child:   Text(getTranslated("active", context)??"" ,style: TextStyle(fontSize: 17),) ,),
+            Padding(padding: EdgeInsets.all(15) , child:   Text(status! ,style: TextStyle(fontSize: 17),) ,),
                Spacer() ,
                  TextButton(child: Text(getTranslated("change_status", context)??"" , style:
-                 TextStyle(color: Colors.white),),onPressed:null,style:
+                 TextStyle(color: Colors.white),),onPressed:changeStatus,style:
                  ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,)))
              ],),
 
                ],
              )   )) ,
+     returnView? Padding(padding: EdgeInsets.only(top: 30 ,bottom: 15),child:Text(getTranslated("return", context)??"" , style:  TextStyle(color: AppColors.logRed,fontSize: 17 ,) ,),):SizedBox(),
+      returnView?  GestureDetector(
+          onTap: () {}, // Image tapped
+          child:Container(
+              width: double.infinity,
+              height: 150,
+              //margin: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(3.0),
+              decoration: BoxDecoration(
+                /* image: DecorationImage(
+                  image: AssetImage(  Images.attendance ,),
+                //  fit: BoxFit.cover,
+                ),*/
+                  borderRadius:const BorderRadius.vertical(
+                    bottom: Radius.circular(10.0),
+                    top: Radius.circular(10.0),
+                  ) ,
+                  border: Border.all(color: AppColors.logRed)) ,
+              child:Row(
+                children: [
+                  Image.asset(
+                    Images.returnImg,
+                    fit: BoxFit.cover, // Fixes border issues
+                  ),
+                  Spacer() ,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Spacer() ,
+                      TextButton(child: Text(getTranslated("mange_return", context)??"" , style:
+                      TextStyle(color: Colors.white),),onPressed:(){
+                        Navigator.push( context,
+                            MaterialPageRoute(builder: (context) => DeliveryShipment())) ;
+                      },style:
+                      ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,)))
+                    ],),
+
+                ],
+              )   )) :SizedBox(),
     Padding(padding: EdgeInsets.only(top: 30 ,bottom: 15),child:Text(getTranslated("custody", context)??"" , style:  TextStyle(color: AppColors.logRed,fontSize: 17 ,) ,),),
    GestureDetector(
         onTap: () {
@@ -167,29 +265,34 @@ return Scaffold(
           fit: BoxFit.cover, // Fixes border issues
         ),
       ) ,
- /* CustomBtn(buttonNm: getTranslated("profile", context)??"", backBtn: AppColors.logRed, txtColor: AppColors.white, onClick: (){
-    Navigator.push( context,
-        MaterialPageRoute(builder: (context) => Profile())) ;
-  }),
-      CustomBtn(buttonNm: getTranslated("salary", context)??"", backBtn: AppColors.logRed, txtColor: AppColors.white, onClick: (){
-        Navigator.push( context,
-            MaterialPageRoute(builder: (context) => SalaryView())) ;
-      }),
-      CustomBtn(buttonNm: getTranslated("wallet", context)??"", backBtn: AppColors.logRed, txtColor: AppColors.white, onClick: (){
-        Navigator.push( context,
-            MaterialPageRoute(builder: (context) => WalletView())) ;
-      }),
-      CustomBtn(buttonNm: getTranslated("violation", context)??"", backBtn: AppColors.logRed, txtColor: AppColors.white, onClick: (){
-        Navigator.push( context,
-            MaterialPageRoute(builder: (context) => ViolationView())) ;
-      }),
-      CustomBtn(buttonNm: getTranslated("add_custody", context)??"", backBtn: AppColors.logRed, txtColor: AppColors.white, onClick: (){
-        Navigator.push( context,
-            MaterialPageRoute(builder: (context) => CustodyView())) ;
-      }),*/
     ])),
   ),
-  bottomNavigationBar: AppBottomNavBar(),
+  bottomNavigationBar: AppBottomNavBar(0),
   drawer: AppDrawer()
-) ; }
+) ;
+
+  }
+   changeStatus(){
+    if(shared!.getString("attend")=="active"){
+      Navigator.push( context,
+          MaterialPageRoute(builder: (context) => LeaveView())).then((value ){
+        setState(() {
+         setStatus() ;
+          //  addCustomerLocation(item) ;
+          // save customer location  ;
+        });
+      } );
+    }
+     else{
+      Navigator.push( context,
+          MaterialPageRoute(builder: (context) => ActiveView())).then((value ){
+        setState(() {
+          setStatus() ;
+          //  addCustomerLocation(item) ;
+          // save customer location  ;
+        });
+      } );
+    }
+
+   }
 }

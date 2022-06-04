@@ -6,8 +6,9 @@ class Custody{
   String?  details ;
   String? id ;
   String? date ;
+  String? processNum ;
 
-  Custody({this.receiver, this.sender, this.amount, this.details, this.id , this.date ,this.senderNm});
+  Custody({this.receiver, this.sender, this.amount, this.details, this.id , this.date ,this.senderNm ,this.processNum});
   factory Custody.fromJson(Map<String  ,dynamic> json ){
     return Custody(
 
@@ -18,6 +19,7 @@ class Custody{
       amount:json["amount"],
       date:json["createdTime"],
       details:json["details"],
+      processNum:json["process_num"],
 
     );
   }
@@ -28,6 +30,7 @@ class Custody{
     map["receiver"]  = receiverId;
     map["amount"]  = amount;
     map["details"]  = details;
+    map["process_num"]  = processNum;
     return map;
   }
 }

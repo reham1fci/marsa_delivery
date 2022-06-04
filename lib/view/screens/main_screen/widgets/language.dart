@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_restart/flutter_restart.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
@@ -59,11 +60,17 @@ getLanguage() ;
   }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-                title: Text(getTranslated("language", context)??"")),
-            body: Column(
+    return
+      Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+              iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
+              systemOverlayStyle:const SystemUiOverlayStyle(
+                // Status bar color
+                statusBarColor: AppColors.statusAppBar,),
+              backgroundColor: AppColors.appBar,title:Text( getTranslated("language", context)??"",style: const TextStyle(color: AppColors.logRed),) ),
+
+          body: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ListTile(
@@ -102,7 +109,7 @@ getLanguage() ;
               ],
             )
         )
-    );
+    ;
   }
   void _restartApp() async {
     await FlutterRestart.restartApp();

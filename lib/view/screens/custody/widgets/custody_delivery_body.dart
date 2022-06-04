@@ -10,6 +10,7 @@ import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
 import 'package:marsa_delivery/utill/app_images.dart';
 import 'package:marsa_delivery/view/base/EditText.dart';
+import 'package:marsa_delivery/view/base/EditTextWithNum.dart';
 import 'package:marsa_delivery/view/base/alert_dialog.dart';
 import 'package:marsa_delivery/view/base/custom_button.dart';
 import 'package:marsa_delivery/view/screens/custody/widgets/drop_down_list.dart';
@@ -79,7 +80,7 @@ class _State extends State<CustodyDeliveryBody> {
                       },);
                     });
               }),
-              EditText(hint: getTranslated("money_amount", context)??"", error: "", imageStr: Images.money, edTxtController: moneyEd , edTextColor: Colors.white),
+              EditTextWithNum(hint: getTranslated("money_amount", context)??"", error: "", imageStr: Images.money, edTxtController: moneyEd , edTextColor: Colors.white),
               EditText(hint: getTranslated("details", context)??"", error: "", image: Icons.add_box, edTxtController: detailsEd , edTextColor: Colors.white),
               //   Spacer() ,
               Padding(

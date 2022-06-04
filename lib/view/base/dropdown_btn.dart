@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marsa_delivery/utill/app_color.dart';
 
 class DropDownBtn extends StatefulWidget{
  List<String>items = [] ;
@@ -22,16 +23,20 @@ class _DropDownBtnState extends State<DropDownBtn> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return DropdownButton<String>(
+    return
+      Container(
+    color: AppColors.lightGrey,
+        child:DropdownButton<String>(
 
       isExpanded: true,
-
-      // Initial Value
+      underline: SizedBox(),
+      //  dropdownColor:AppColors.lightGrey,
+        // Initial Value
    //   value: dropdownvalue,
 
       // Down Arrow Icon
       icon: const Icon(Icons.keyboard_arrow_down),
-      hint:Text( dropdownvalue),
+      hint:Text( dropdownvalue,),
 
       // Array list of items
       items: widget.items.map((String value) {
@@ -48,7 +53,7 @@ class _DropDownBtnState extends State<DropDownBtn> {
         });
       widget.onChanged(string) ;
       },
-    );
+        )  );
   }
     refresh() {
      setState(() {});

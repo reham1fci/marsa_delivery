@@ -29,6 +29,9 @@ class _State extends State<CustodyBody> {
   List<Custody>custodyList =[];
   User? user ;
   Api api = Api() ;
+  String credit="0.0"  ;
+  String debit ="0.0"  ;
+  int balance =0 ;
   @override
   void initState() {
     // TODO: implement initState
@@ -44,8 +47,24 @@ class _State extends State<CustodyBody> {
   getCustodyList() async {
     custodyList =[];
     Map m  = {"user_id":user!.userId} ;
-    await     api.request(url:Constants.SHOWCUSTODY, map: m, onSuccess: onSuccess, onError: onError)
+    await     api.request(url:Constants.SHOWCUSTODY, map: m, onSuccess: onSuccess, onError: onError) ;
+    Map m2 = {"driver_id":user!.userId} ;
+
+    await     api.request(url:Constants.SHOWTOTALCUSTODY, map: m2, onSuccess: onSuccessReq2, onError: onError)
     ;
+  }
+  onSuccessReq2(var jsonStr){
+    print(jsonStr);
+    var jsonObj = json.decode(jsonStr);
+      Wallet wallet  = Wallet.fromJsonCustody(jsonObj) ;
+      setState(() {
+        credit =wallet.credit! ;
+        debit= wallet.debit!  ;
+        balance = wallet.balance!;
+
+      });
+
+
   }
   onSuccess(var jsonStr){
     List<dynamic> list = json.decode(jsonStr);
@@ -81,21 +100,24 @@ class _State extends State<CustodyBody> {
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(
-
+centerTitle: true,
           iconTheme:  const IconThemeData(color: AppColors.appBarIcon),
           systemOverlayStyle:const SystemUiOverlayStyle(
             // Status bar color
             statusBarColor: AppColors.statusAppBar,),
           backgroundColor: AppColors.appBar,title:Text( getTranslated("custody", context)??"",style: const TextStyle(color: AppColors.logRed),) ),
       body:  loading? Center (child:CircularProgressIndicator(color: AppColors.logRed,)) :
-      custodyList.isNotEmpty?
-      ListView.builder(
+
+      Container( height :double.infinity,child:
+          Column(children: [
+            totalTable(),
+      custodyList.isNotEmpty?  Expanded(child: ListView.builder(
         itemBuilder: (context  , index ){
           return CustodyItem(custody: custodyList[index],index:index ,onReceiveClick: (){
             receiveCustody(index) ;
           },);
-        } ,itemCount:  custodyList.length , )
-          :NoThingToShow(),);
+        } ,itemCount:  custodyList.length , ))
+          : Expanded(child:NoThingToShow()),],)));
 
   }
   receiveCustody(int index){
@@ -124,5 +146,41 @@ getCustodyList() ;
      }
 
    }
+   Widget totalTable (){
+    return
+    Padding(padding: EdgeInsets.all(15.0) ,child:  Table(
+        border:  const TableBorder(horizontalInside:  BorderSide(
+            width: 1.0, color:AppColors.logRed),
+          verticalInside:  BorderSide(
+              width: 1.0, color:AppColors.logRed),
+          left: BorderSide(width: 1.0, color: AppColors.logRed),
+          right: BorderSide(width: 1.0, color: AppColors.logRed),
+          bottom: BorderSide(width: 1.0, color:AppColors.logRed),
+          top: BorderSide(width: 1.0, color: AppColors.logRed),
+
+        ),children: [
+        tableRow(getTranslated("debit", context)??"", getTranslated("credit", context)??"" ,getTranslated("balance", context)??"" ,AppColors.logRed),
+        tableRow(debit, credit ,balance.toString() ,Colors.black)
+      ],));  }
+
+
+  TableRow tableRow( String  s ,String s2  ,String s3 , Color color ){
+    return  TableRow(
+        children: [
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(s,style: TextStyle(color:color,),          textAlign: TextAlign.center,
+                ),
+          ),
+          Padding(
+              padding:  const EdgeInsets.all(8.0),
+    child: Text(s2,style: TextStyle(color: color) , textAlign: TextAlign.center,)),
+          Padding(
+              padding:  const EdgeInsets.all(8.0),
+    child: Text(s3,style: TextStyle(color: color),  textAlign: TextAlign.center,),)
+        ]
+    );
+  }
 
 }

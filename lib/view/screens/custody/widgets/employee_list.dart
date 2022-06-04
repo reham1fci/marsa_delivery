@@ -25,8 +25,8 @@ class EmployeeList extends StatefulWidget{
 }
 class _State extends State<EmployeeList> {
   bool isLoading = true  ;
-  static List<User> employee  =[];
-  static List<User> filterList  =[];
+   List<User> employee  =[];
+   List<User> filterList  =[];
   User? selectedEmployee ;
   TextEditingController userNameEd  =  TextEditingController()  ;
   TextEditingController passEd  =  TextEditingController()  ;
@@ -43,6 +43,7 @@ class _State extends State<EmployeeList> {
 
   }
   onGetRequest( var jsonObj){
+
     print (jsonObj);
     setState(() {
       isLoading = false;

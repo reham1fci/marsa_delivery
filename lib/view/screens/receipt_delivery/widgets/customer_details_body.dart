@@ -11,6 +11,7 @@ import 'package:marsa_delivery/model/point_sale_client.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
 import 'package:marsa_delivery/view/screens/receipt_delivery/widgets/customer_card.dart';
+import 'package:marsa_delivery/view/screens/receipt_delivery/widgets/image_view.dart';
 import 'package:marsa_delivery/view/screens/receipt_delivery/widgets/shipment_item.dart';
 class CustomerDetailsBody extends StatefulWidget{
   String customerID;
@@ -79,7 +80,7 @@ print(jsonStr) ;
             systemOverlayStyle:const SystemUiOverlayStyle(
               // Status bar color
               statusBarColor: AppColors.statusAppBar,),
-            backgroundColor: AppColors.appBar,title:Text( getTranslated("qtys", context)??"",style: const TextStyle(color: AppColors.logRed),) ) ,
+            backgroundColor: AppColors.appBar,title:Text( getTranslated("details", context)??"",style: const TextStyle(color: AppColors.logRed),) ) ,
 
         body:   client != null  ?  Container( height :double.infinity,child:   Column(children: [
 
@@ -90,7 +91,12 @@ print(jsonStr) ;
 
        TextButton(child: Text(getTranslated("add_image", context)??"" , style:
           TextStyle(color: Colors.white),),onPressed:getImage,style:
-          ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,))):Image.network(client!.imageLocation!,height: 150,),
+          ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,))):
+        GestureDetector(
+          child:  Image.network(client!.imageLocation!,height: 150,),onTap: (){
+          Navigator.push( context,
+              MaterialPageRoute(builder: (context) => ImageView(client!.imageLocation!))) ;
+        },) ,
            _image!= null? Image.file(File(_image!.path),height: 150,):SizedBox(),
            _image!= null?   TextButton(child: Text(getTranslated("upload", context)??"" , style:
            TextStyle(color: Colors.white),),onPressed:onUploadClick,style:
