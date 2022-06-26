@@ -2,19 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/model/custody.dart';
-import 'package:marsa_delivery/model/salary.dart';
-import 'package:marsa_delivery/model/wallet.dart';
+import 'package:marsa_delivery/model/thechief_request.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/view/base/custom_button.dart';
 
-class   CustodyItem  extends StatelessWidget{
-  Custody custody ;
+class   TheChiefItem  extends StatelessWidget{
+  TheChiefRequest req ;
   int index ;
   Function? onReceiveClick ;
-  Function? onRejectClick ;
 
 
-  CustodyItem({ required this.custody,  required this.index ,this.onReceiveClick ,this.onRejectClick});
+  TheChiefItem({ required this.req,  required this.index ,this.onReceiveClick});
 
   @override
   Widget build(BuildContext context) {
@@ -26,29 +24,23 @@ class   CustodyItem  extends StatelessWidget{
           Padding(padding: EdgeInsets.all(10.0) , child:   Row(
 
               children: <Widget>[
-                Text((getTranslated("custody", context)??"")+" : "  ,style: TextStyle(color: AppColors.logRed)), Text(custody.id!,style: TextStyle(color: AppColors.logRed)),
+                Text((getTranslated("request", context)??"")+" : "  ,style: TextStyle(color: AppColors.logRed)), Text(req.orderNum!,style: TextStyle(color: AppColors.logRed)),
 
                 Spacer() ,
                 // Icon(Icons.date_range ,color: AppColors.logRed,) ,
-                Text(custody.date!,style: TextStyle(color: AppColors.logRed))
+                Text(req.date!,style: TextStyle(color: AppColors.logRed))
               ]),),
           Divider(color: AppColors.logRed,thickness: 1,),
           Padding(padding: EdgeInsets.all(10.0) , child:          Row(children: <Widget>[
-            Text('${getTranslated("from", context)??"" } : '  ,), Text(custody.senderNm!)]),),
+            Text('${getTranslated("total_cost", context)??"" } : '  ,), Text(req.totalCost!)]),),
           Padding(padding: EdgeInsets.all(10.0) , child:       Row(children: <Widget>[
-            Text('${getTranslated("money_amount", context)??"" } : '  ,), Text(custody.amount!)])),
+            Text('${getTranslated("order_cost", context)??"" } : '  ,), Text(req.orderCost!)])),
           Padding(padding: EdgeInsets.all(10.0) , child:       Row(children: <Widget>[
-            Text('${getTranslated("custody_type", context)??"" } : '  ,), Text(custody.state!)])),
-          Padding(padding: EdgeInsets.all(10.0) , child:       Row(children: <Widget>[
-            Text('${getTranslated("details", context)??"" } : '), Text(custody.details!)])),
-
-       Padding(padding: EdgeInsets.all(10) , child: Row(children: <Widget>[
-         CustomBtn(buttonNm: getTranslated("receive", context)??"", onClick:()=> onReceiveClick!() ,
-           backBtn:AppColors.logRed, txtColor: AppColors.white,) ,
-         Spacer(),
-         CustomBtn(buttonNm: getTranslated("reject", context)??"", onClick:()=> onRejectClick!() ,
-           backBtn:AppColors.logRed, txtColor: AppColors.white,)
-       ])),
+            Text('${getTranslated("deliver_cost", context)??"" } : '  ,), Text(req.deliverCost!)])),
+          Padding(padding: EdgeInsets.all(10) , child:
+          CustomBtn(buttonNm: getTranslated("receive", context)??"", onClick:()=> onReceiveClick!() ,
+            backBtn:AppColors.logRed, txtColor: AppColors.white,)
+          ),
 
         ],),
 

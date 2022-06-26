@@ -14,7 +14,7 @@ import 'package:marsa_delivery/view/base/no_thing_to_show.dart';
 import 'package:marsa_delivery/view/screens/main_screen/widgets/salary_details.dart';
 import 'package:marsa_delivery/view/screens/main_screen/widgets/salary_item.dart';
 import 'package:marsa_delivery/view/screens/requests/add_holiday_request.dart';
-import 'package:marsa_delivery/view/screens/requests/financial.dart';
+import 'package:marsa_delivery/view/screens/requests/AddFinancialReq.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class SalaryBody extends StatefulWidget{
   @override
@@ -95,12 +95,7 @@ class _State extends State<SalaryBody> {
         },);
       } ,itemCount:  salaryList.length , ))
     :Expanded(child:NoThingToShow()),
-     Padding(padding: EdgeInsets.only(bottom: 40 ,top: 40) , child: CustomBtn(buttonNm:
-     getTranslated("financial_advance", context)??"", onClick: (){
-       Navigator.push( context,
-           MaterialPageRoute(builder: (context) => AddHolidayReq())) ;
-     } ,  backBtn:AppColors.logRed, txtColor: AppColors.white,),
-     )
+
     ])));
   }
 

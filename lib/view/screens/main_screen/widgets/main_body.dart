@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
 import 'package:marsa_delivery/model/User.dart';
+import 'package:marsa_delivery/model/target.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
 import 'package:marsa_delivery/utill/app_constant.dart';
 import 'package:marsa_delivery/utill/app_images.dart';
@@ -23,8 +24,11 @@ import 'package:marsa_delivery/view/screens/main_screen/user_profile.dart';
 import 'package:marsa_delivery/view/screens/main_screen/violation_view.dart';
 import 'package:marsa_delivery/view/screens/main_screen/wallet_view.dart';
 import 'package:marsa_delivery/view/screens/main_screen/widgets/pi_chart.dart';
+import 'package:marsa_delivery/view/screens/main_screen/widgets/target_view.dart';
 import 'package:marsa_delivery/view/screens/points_sale/show_clients_view.dart';
 import 'package:marsa_delivery/view/screens/receipt_delivery/receipt_delivery.dart';
+import 'package:marsa_delivery/view/screens/requests/request_option.dart';
+import 'package:marsa_delivery/view/screens/requests/thechief_request_list.dart';
 import 'package:marsa_delivery/view/screens/return/delivery_shipment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,8 +44,9 @@ class _MainBodyState extends State<MainBody> {
   CurrentLoc currentLoc  = CurrentLoc() ;
   Api api = Api() ;
   String? status  ;
+  Target? target  ;
   SharedPreferences?  shared ;
-  bool returnView  = true ;
+  bool returnView  = false ;
   @override
   void initState() {
     // TODO: implement initState
@@ -54,6 +59,11 @@ class _MainBodyState extends State<MainBody> {
   getUserData() async {
       shared = await SharedPreferences.getInstance();
    User user = User.fromJsonShared(json.decode(shared!.getString("user")!));
+   if(user.admin!=null&&user.admin!){
+     setState(() {
+       returnView = true;
+     });
+   }
       if(shared!.containsKey("attend")){
         setState(() {
           status = getTranslated(shared!.getString("attend")!, context);
@@ -66,16 +76,27 @@ class _MainBodyState extends State<MainBody> {
         });
       }
 
-    currentLoc.getCurrentLocation(onGetLocation:(lat , lng){
+    currentLoc.getCurrentLocation(onGetLocation:(lat , lng) async {
       print(lat);
       print(lng)  ;
 
 user.lat  = lat.toString() ;
 user.lng  = lng.toString() ;
 user.createLocation  = Api.getDate('yyyy-MM-dd  H:m:s aa') ;
-api.request(url: Constants.getDriverLocation, map: user.addLocationToMap(), onSuccess: onLocationAdded, onError: onError) ;
+await api.request(url: Constants.getDriverLocation, map: user.addLocationToMap(), onSuccess: onLocationAdded, onError: onError) ;
 
     } );
+ Map m  =  {"driver_id":user.userId} ;
+      await api.request(url: Constants.SHOWTARGET, map:m, onSuccess: onSuccessTarget, onError: onError) ;
+
+  }
+  onSuccessTarget(var jsonObj){
+    print(jsonObj)  ;
+    var jsonStr = json.decode(jsonObj);
+    setState(() {
+      target  = Target.fromJson(jsonStr) ;
+
+    });
 
   }
   setStatus() async {
@@ -141,7 +162,7 @@ return Scaffold(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      PiChart(),
+      target==null?CircularProgressIndicator(color: AppColors.logRed,):TargetView(target!),
       Padding(padding: EdgeInsets.only(top: 30 ,bottom: 15),child:Text(getTranslated("attendance", context)??"" , style:  TextStyle(color: AppColors.logRed,fontSize: 17 ,) ,),),
       GestureDetector(
           onTap: () {}, // Image tapped
@@ -174,9 +195,9 @@ return Scaffold(
 
             Padding(padding: EdgeInsets.all(15) , child:   Text(status! ,style: TextStyle(fontSize: 17),) ,),
                Spacer() ,
-                 TextButton(child: Text(getTranslated("change_status", context)??"" , style:
+             Padding(padding: EdgeInsets.only(left: 10 , right: 10),child:    TextButton(child: Text(getTranslated("change_status", context)??"" , style:
                  TextStyle(color: Colors.white),),onPressed:changeStatus,style:
-                 ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,)))
+                 ButtonStyle(backgroundColor:MaterialStateProperty.all(AppColors.logRed,))))
              ],),
 
                ],
@@ -229,6 +250,16 @@ return Scaffold(
         }, // Image tapped
         child: Image.asset(
           Images.custody,
+          fit: BoxFit.cover, // Fixes border issues
+        ),
+      ) , Padding(padding: EdgeInsets.only(top: 30 ,bottom: 15),child:Text(getTranslated("requests", context)??"" , style:  TextStyle(color: AppColors.logRed,fontSize: 17 ,) ,),),
+   GestureDetector(
+        onTap: () {
+          Navigator.push( context,
+              MaterialPageRoute(builder: (context) => RequestOption())) ;
+        }, // Image tapped
+        child: Image.asset(
+          Images.requests,
           fit: BoxFit.cover, // Fixes border issues
         ),
       ) ,

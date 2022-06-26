@@ -25,4 +25,5 @@ class Images {
   static const String car = 'assets/images/car.png';
   static const String whatsapp = 'assets/images/whatsapp.png';
   static const String returnImg = 'assets/images/return.png';
+  static const String requests = 'assets/images/requests.png';
 }

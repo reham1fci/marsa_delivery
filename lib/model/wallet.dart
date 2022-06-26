@@ -5,7 +5,7 @@ class Wallet{
   String? details ;
   String? walletId ;
 
-  int? balance
+  String? balance
   ;
   String? date
   ;
@@ -14,7 +14,7 @@ class Wallet{
     return Wallet(
 
       name: json["name"] ,
-      balance:   json["raseed"],
+      balance:   json["raseed"].toString(),
       credit: json["daen"],
       debit:json["madeen"],
 date:json["process_date"],

@@ -1,11 +1,17 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
 import 'package:marsa_delivery/localization/language_constrants.dart';
+import 'package:marsa_delivery/model/User.dart';
+import 'package:marsa_delivery/model/financial.dart';
 import 'package:marsa_delivery/utill/app_color.dart';
+import 'package:marsa_delivery/utill/app_constant.dart';
 import 'package:marsa_delivery/utill/app_images.dart';
+import 'package:marsa_delivery/view/base/alert_dialog.dart';
 import 'package:marsa_delivery/view/base/custom_button.dart';
 import 'package:marsa_delivery/view/screens/requests/widgets/EditText.dart';
 import 'package:marsa_delivery/view/screens/requests/widgets/EditTextWithNum.dart';
@@ -24,6 +30,7 @@ class _State extends State<FinancialReq> {
   TextEditingController moneyEd  =  TextEditingController()  ;
   TextEditingController dateEd  =  TextEditingController()  ;
   Api api  = Api() ;
+  User? user  ;
   late SharedPreferences sharedPrefs ;
   DateTime selectedDate = DateTime.now();
 
@@ -31,6 +38,12 @@ class _State extends State<FinancialReq> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getUserData() ;
+  }
+  getUserData() async {
+    SharedPreferences  shared = await SharedPreferences.getInstance();
+    user = User.fromJsonShared(json.decode(shared.getString("user")!));
+
   }
   @override
   Widget build(BuildContext context) {
@@ -78,8 +91,71 @@ class _State extends State<FinancialReq> {
         ),
     );
   }
-  onAddBtn(){}
-_selectDate() async {
+  onAddBtn(){
+    api.checkInternet(onConnect: () {
+      setState(() {
+        String money  = moneyEd.text ;
+        String reason  = reasonEd.text ;
+        String date  = dateEd.text ;
+        setState(() {
+          bool isValidate =  validation(money: money, reason: reason, date: date) ;
+          if(isValidate){
+            isLoading = true  ;
+            Financial request = Financial(date: date , money:money  , reason: reason )  ;
+
+                Map m =request.toMap(user!.userId!);
+            api.request(url: Constants.ADDFINANCIAL, map:m  , onError:  (String errorMsg
+                ){
+              CustomDialog.dialog(context: context, title: "", message: errorMsg, isCancelBtn: false) ;
+            }
+
+                , onSuccess:onAddSuccess
+            );
+
+          }
+          else{
+            CustomDialog.dialog(context: context, title: "", message: getTranslated("fill_data", context)??"", isCancelBtn: false) ;
+
+          }
+        });
+
+      });
+    },notConnect: (){
+      CustomDialog.dialog(context: context  , title:getTranslated("error" , context)??"error"
+          , isCancelBtn: false ,message:getTranslated("no_internet" , context)??"No Internet Connection"  , onOkClick: (){} ) ;
+
+    });
+
+  }
+  onAddSuccess(var jsonObj ){
+    var jsonStr = json.decode(jsonObj);
+    print(jsonStr);
+    String  msg  = jsonStr['msg']  ;
+    print(msg) ;
+    setState(() {
+      isLoading =false ;
+    });
+      CustomDialog.dialog(context: context, title: "", message: msg, isCancelBtn: false ,onOkClick: (){
+        Navigator.of(context).pop() ;
+      }) ;
+
+
+  }
+  bool validation ({required String money  ,required reason  , required String date} ){
+    if(money.isEmpty) {
+      return false  ;
+    }
+    else if(reason.isEmpty){
+      return false  ;
+    }  else if(date.isEmpty){
+      return false  ;
+    }
+    else{
+      return true ;
+    }
+
+  }
+  _selectDate() async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
@@ -88,7 +164,7 @@ _selectDate() async {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        var formatter =  DateFormat("dd/MM/yyyy");
+        var formatter =  DateFormat("yyyy-MM-dd");
         String formattedDate = formatter.format(selectedDate);
         dateEd.text =formattedDate ;
       });

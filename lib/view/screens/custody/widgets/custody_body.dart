@@ -1,6 +1,5 @@
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:marsa_delivery/ApiConnection/Api.dart';
@@ -16,6 +15,8 @@ import 'package:marsa_delivery/view/screens/custody/custody_delivery.dart';
 import 'package:marsa_delivery/view/screens/custody/widgets/custody_item.dart';
 import 'package:marsa_delivery/view/screens/main_screen/widgets/wallet_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'custody_details.dart';
 class CustodyBody extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -31,7 +32,7 @@ class _State extends State<CustodyBody> {
   Api api = Api() ;
   String credit="0.0"  ;
   String debit ="0.0"  ;
-  int balance =0 ;
+  String balance ="0.0" ;
   @override
   void initState() {
     // TODO: implement initState
@@ -109,13 +110,22 @@ centerTitle: true,
       body:  loading? Center (child:CircularProgressIndicator(color: AppColors.logRed,)) :
 
       Container( height :double.infinity,child:
-          Column(children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+           Align(alignment: Alignment.topRight,child: TextButton(onPressed: (){
+              Navigator.push( context,
+                  MaterialPageRoute(builder: (context) => CustodyDetails())) ;
+            }, child: Text(getTranslated("details", context)??"" ,style: TextStyle(color: Colors.black),)) ),
             totalTable(),
       custodyList.isNotEmpty?  Expanded(child: ListView.builder(
         itemBuilder: (context  , index ){
           return CustodyItem(custody: custodyList[index],index:index ,onReceiveClick: (){
             receiveCustody(index) ;
-          },);
+          },onRejectClick:(){
+            rejectCustody(index) ;
+          } ,);
         } ,itemCount:  custodyList.length , ))
           : Expanded(child:NoThingToShow()),],)));
 
@@ -124,6 +134,32 @@ centerTitle: true,
     Custody c = custodyList[index] ;
    Map m  = c.custodyToMap(user!.userId!) ;
     api.request(url: Constants.RECEIVECUSTODY, map: m, onSuccess: onSuccessReceive, onError: onError) ;
+  } rejectCustody(int index){
+    Custody c = custodyList[index] ;
+   Map m  = {"id" :c.id} ;
+    api.request(url: Constants.REJECTCUSTODY, map: m, onSuccess: onSuccessReject, onError: onError) ;
+    print( Constants.REJECTCUSTODY) ;
+  }
+  onSuccessReject(var jsonObj){
+    var jsonStr = json.decode(jsonObj);
+    print(jsonStr);
+    String  msg  = jsonStr['msg']  ;
+    print(msg) ;
+    setState(() {
+      loading =true ;
+    });
+    if(msg=="تمت عمليةالرفض بنجاح"){
+      CustomDialog.dialog(context: context, title: "", message: msg, isCancelBtn: false ,onOkClick: (){
+
+        getCustodyList() ;
+      }) ;
+
+    }
+    else{
+      CustomDialog.dialog(context: context, title: getTranslated("error" , context)??"error", message: msg, isCancelBtn: false) ;
+
+    }
+
   }
    onSuccessReceive(var jsonObj){
      var jsonStr = json.decode(jsonObj);

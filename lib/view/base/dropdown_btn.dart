@@ -5,7 +5,7 @@ class DropDownBtn extends StatefulWidget{
  List<String>items = [] ;
  Function onChanged;
 
- DropDownBtn({required this.items, required this.onChanged,});
+ DropDownBtn({required this.items, required this.onChanged});
 
   @override
   State<DropDownBtn> createState() => _DropDownBtnState();
@@ -51,7 +51,7 @@ class _DropDownBtnState extends State<DropDownBtn> {
         setState(() {
           dropdownvalue  = string!  ;
         });
-      widget.onChanged(string) ;
+      widget.onChanged(string ) ;
       },
         )  );
   }

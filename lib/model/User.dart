@@ -24,9 +24,10 @@ class User {
   String? employeeTarget;
   String? licenceEndDate;
   String? shipmentQty  ;
+  bool?admin ;
 
 
-  User({this.userId, this.userName, this.userPassword, this.name, this.phone , this.lng , this.lat , this.createLocation,this.employeeDate,this.employeeEndDate,this.email,this.salaryDate
+  User({this.userId, this.userName, this.userPassword, this.name, this.phone , this.lng ,this.admin, this.lat , this.createLocation,this.employeeDate,this.employeeEndDate,this.email,this.salaryDate
  , this.employeeTarget ,this.housingAllowance ,this.idNum,this.insuranceCardEndDate,this.insuranceEndDate,this.passEndDate,this.salary,this.testPeriod,this.transAllowance,this.vacation,this.licenceEndDate ,this.shipmentQty});
 
   factory User.fromJson (Map<String  ,dynamic> json ,  String password , ){
@@ -37,6 +38,7 @@ class User {
         phone:  "12346677" ,
         userId:  json["user_id"]  ,
         name:   json["name"] ,
+        admin:   json["employ_type"]==1?true :false ,
         userPassword: password  ,
 
       );
@@ -69,6 +71,7 @@ class User {
         userId:  json["userId"]  ,
         name:   json["name"] ,
         userPassword:  json["password"]  ,
+      admin:  json["admin"]
 
     );
   }
@@ -106,7 +109,8 @@ factory User.fromJsonReturn(Map<String  ,dynamic> json ){
       "userName":userName ,
       "password":userPassword ,
       "name":name ,
-      "phone": phone
+      "phone": phone,
+      "admin":admin
 
     };
   }

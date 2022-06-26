@@ -31,5 +31,20 @@ class Constants{
   static const String RETURNSHIP = BASE_URL+'Return_Shipments_api.php';
   static const String RETURNSHIPDET = BASE_URL+'Return_Shipments_Details_api.php';
   static const String RECEIPTRETURNSHIP = BASE_URL+'Istlam_Ragee_api.php';
+  static const String BANKLIST = BASE_URL+'bank_list_api.php';
+  static const String CUSTODYDETAILS = BASE_URL+'show_financial_covenant_details_api.php';
+  static const String REJECTCUSTODY = BASE_URL+'refuse_Financial_api.php';
+  static const String SHOWTHESHEFSLIST = BASE_URL+'Show_the_chefs_order_api.php';
+  static const String AddTHECHIEFREQ = BASE_URL+'Insert_the_chefs_order_api.php';
+  static const String RECCHEFREQ = BASE_URL+'taslem_the chefs_order_api.php';
+  static const String ADDHOLIDAY = BASE_URL+'Ask_Vac_api.php' ;
+  static const String SHOWHOLIDAY = BASE_URL+'Show_Vac_api.php' ;
+  static const String DIRECTWORk = BASE_URL+'direct_work_requestcode_api.php' ;
+  static const String ADDFINANCIAL = BASE_URL+'Salf_Request_api.php' ;
+  static const String SHOWFINANCIAL = BASE_URL+'Show_Salf_api.php' ;
+  static const String SHOWTARGET = BASE_URL+'Show_Target_api.php' ;
+  static const String SHOWCUSTODYREQ = BASE_URL+'Show_Financial_Covenant_Request_api.php' ;
+  static const String ADDCUSTODYREQ = BASE_URL+'Financial_Covenant_Request_api.php' ;
+  static const String ACCEPTCUSTODY = BASE_URL+'Accept_Financial_Covenant_Request_api.php' ;
 
 }

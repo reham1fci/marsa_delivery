@@ -123,6 +123,7 @@ Api api  = Api() ;
   }
 void onLoginSuccess (var  jsonObj ) {
   var jsonStr = json.decode(jsonObj);
+  print(jsonStr) ;
   setState(() {
     isLoading = false ;
   });
