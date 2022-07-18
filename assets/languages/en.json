@@ -155,7 +155,16 @@
   "target": "Target",
   "required": "Required",
   "custody_req": "Custody Request",
-  "accept": "Accept"
+  "accept": "Accept",
+  "cars": "Cars",
+  "deliver_car_req":"Deliver Car Request",
+  "receipt_car_req":"Receipt Car Request",
+  "struc_num": "Struc No",
+  "model": "Model",
+  "user_name_hint": "user name(use nickname , email) " ,
+  "car_type": "Type",
+  "car_plate": "Car plate num",
+  "deliver": "Deliver"
 
 
 

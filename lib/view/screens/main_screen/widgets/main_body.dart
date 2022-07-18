@@ -16,6 +16,7 @@ import 'package:marsa_delivery/view/base/drawer.dart';
 import 'package:marsa_delivery/view/base/get_current_location.dart';
 import 'package:marsa_delivery/view/screens/Attendance/active_view.dart';
 import 'package:marsa_delivery/view/screens/Attendance/leave_view.dart';
+import 'package:marsa_delivery/view/screens/cars/cars_option.dart';
 import 'package:marsa_delivery/view/screens/clients/clients.dart';
 import 'package:marsa_delivery/view/screens/custody/custody_delivery.dart';
 import 'package:marsa_delivery/view/screens/custody/custody_receive.dart';
@@ -43,7 +44,7 @@ class _MainBodyState extends State<MainBody> {
 
   CurrentLoc currentLoc  = CurrentLoc() ;
   Api api = Api() ;
-  String? status = "leave"  ;
+  String? status  ;
   Target? target  ;
   SharedPreferences?  shared ;
   bool returnView  = false ;
@@ -51,7 +52,7 @@ class _MainBodyState extends State<MainBody> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  //  handleAppLifecycleState() ;
+    handleAppLifecycleState() ;
 
     getUserData() ;
 
@@ -274,6 +275,17 @@ return Scaffold(
           fit: BoxFit.cover, // Fixes border issues
         ),
       ) ,
+      Padding(padding: EdgeInsets.only(top: 30 ,bottom: 15),child:Text(getTranslated("cars", context)??"" , style:  TextStyle(color: AppColors.logRed,fontSize: 17 ,) ,),),
+    GestureDetector(
+    onTap: () {
+    Navigator.push( context,
+    MaterialPageRoute(builder: (context) => CarsOption())) ;
+    }, // Image tapped
+    child: Image.asset(
+    Images.cars,
+    fit: BoxFit.cover, // Fixes border issues
+    ),
+    ) ,
       Padding(padding: EdgeInsets.only(top: 30 ,bottom: 15),child:Text(getTranslated("point_sale", context)??"" , style:  TextStyle(color: AppColors.logRed,fontSize: 17 ,) ,),),
       GestureDetector(
         onTap: () {

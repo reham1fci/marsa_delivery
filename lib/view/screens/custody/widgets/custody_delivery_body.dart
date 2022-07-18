@@ -39,6 +39,7 @@ class _State extends State<CustodyDeliveryBody> {
   TextEditingController employeeEd  =  TextEditingController()  ;
   TextEditingController moneyEd  =  TextEditingController()  ;
   TextEditingController detailsEd  =  TextEditingController()  ;
+  bool enableEmployees =true  ;
   Api api = Api() ;
 
    @override
@@ -94,7 +95,7 @@ createList() ;
                 selectedEmployee = user ;
                 print(user.name);
               },) */
-              EditText(hint: getTranslated("emp_name", context)??"", error: "", image:  Icons.person, edTxtController: employeeEd , edTextColor: Colors.white , onTap: () {
+            enableEmployees?  EditText(hint: getTranslated("emp_name", context)??"", error: "", image:  Icons.person, edTxtController: employeeEd , edTextColor: Colors.white , onTap: () {
                 showDialog<void>(
                     context: context,
                     barrierDismissible: false, // user must tap button!
@@ -107,7 +108,7 @@ createList() ;
 
                       },);
                     });
-              }),
+              }):SizedBox(),
             Padding(padding: EdgeInsets.only(left: 30 , right: 30 , top: 8 , bottom: 8) , child:  Column(
                   children: List.generate(
                       custodyTypes.length,
@@ -175,7 +176,7 @@ createList() ;
 
   }
   bool validation (String name  , String money , String details){
-    if(name.isEmpty) {
+    if(name.isEmpty&& selected!.id!=2) {
       return false  ;
     }
     else if(money.isEmpty||(double.parse(money)<1)){
@@ -221,6 +222,9 @@ createList() ;
         //  widget.onSelected!(selected) ;
 print(selected.toString()) ;
 if(selected!.id  == 2) {
+  setState(() {
+    enableEmployees =false  ;
+    selectedEmployee = User(userId: "") ;
   showDialog<void>(
 
       context: context,
@@ -238,11 +242,13 @@ if(selected!.id  == 2) {
 
 
       } );
+  });
 
 
 }
 else{
   setState(() {
+    enableEmployees =true  ;
     selectedBankNm ="" ;
 
   });
