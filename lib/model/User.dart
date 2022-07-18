@@ -121,6 +121,12 @@ factory User.fromJsonReturn(Map<String  ,dynamic> json ){
     map["username"]  = userName ;
     map["password"]  = userPassword;
     return map;
+  } Map signupMap() {
+    var map = <String, dynamic>{};
+    map["username"]  = userName ;
+    map["password"]  = userPassword;
+    map["name"]  = name;
+    return map;
   }
 
   Map addLocationToMap() {

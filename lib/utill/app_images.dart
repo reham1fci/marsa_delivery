@@ -26,4 +26,9 @@ class Images {
   static const String whatsapp = 'assets/images/whatsapp.png';
   static const String returnImg = 'assets/images/return.png';
   static const String requests = 'assets/images/requests.png';
+  static const String cars = 'assets/images/cars.png';
+  static const String carNm = 'assets/images/car_nm.png';
+  static const String carType = 'assets/images/car_type.png';
+  static const String carModel = 'assets/images/car_model.png';
+  static const String carStruct = 'assets/images/struct_num.png';
 }

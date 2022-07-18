@@ -136,16 +136,9 @@ onAddSuccess(var jsonObj ){
   setState(() {
   isLoading =false ;
   });
-  if(msg=="تمت عملية اضافة الطلب بنجاح"){
   CustomDialog.dialog(context: context, title: "", message: msg, isCancelBtn: false ,onOkClick: (){
 Navigator.of(context).pop() ;
   }) ;
-
-  }
-  else{
-  CustomDialog.dialog(context: context, title: getTranslated("error" , context)??"error", message: msg, isCancelBtn: false) ;
-
-  }
 }
   bool validation ({required String orderNum  ,required String total , required String deliverCost , required String orderCost} ){
     if(orderNum.isEmpty) {

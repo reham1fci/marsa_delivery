@@ -148,17 +148,12 @@ centerTitle: true,
     setState(() {
       loading =true ;
     });
-    if(msg=="تمت عمليةالرفض بنجاح"){
+
       CustomDialog.dialog(context: context, title: "", message: msg, isCancelBtn: false ,onOkClick: (){
 
         getCustodyList() ;
       }) ;
 
-    }
-    else{
-      CustomDialog.dialog(context: context, title: getTranslated("error" , context)??"error", message: msg, isCancelBtn: false) ;
-
-    }
 
   }
    onSuccessReceive(var jsonObj){
@@ -169,17 +164,11 @@ centerTitle: true,
      setState(() {
        loading =true ;
      });
-     if(msg=="تمت عملية الاستلام بنجاح"){
        CustomDialog.dialog(context: context, title: "", message: msg, isCancelBtn: false ,onOkClick: (){
 
 getCustodyList() ;
        }) ;
 
-     }
-     else{
-       CustomDialog.dialog(context: context, title: getTranslated("error" , context)??"error", message: msg, isCancelBtn: false) ;
-
-     }
 
    }
    Widget totalTable (){
