@@ -15,11 +15,10 @@ import 'package:marsa_delivery/utill/app_constant.dart';
 import 'package:marsa_delivery/view/base/alert_dialog.dart';
 import 'package:marsa_delivery/view/base/map_show.dart';
 import 'package:marsa_delivery/view/base/reason_dialog.dart';
-import 'package:marsa_delivery/view/base/tost.dart';
 import 'package:marsa_delivery/view/screens/PlacePicker/place_picker.dart';
 import 'package:marsa_delivery/view/screens/receipt_delivery/customer_details.dart';
 import 'package:marsa_delivery/view/screens/receipt_delivery/widgets/delivery_methods.dart';
-import 'package:popup_menu/popup_menu.dart';
+import 'package:popup_menu/popup_menu.dart' as popup ;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -123,17 +122,17 @@ onPressCustomerName(){
       MaterialPageRoute(builder: (context) => CustomerDetails(item.customerID!, item.date!))) ;
 }
   showPopupMenu(Shipment item , Offset offset) {
-    PopupMenu menu = PopupMenu(
+    popup.PopupMenu menu =popup. PopupMenu(
       backgroundColor: AppColors.logRed,
       // lineColor: Colors.tealAccent,
       maxColumn: 2,
 
       context: context,
       items: [
-        MenuItem(title: getTranslated("delivery_done", context), image: Icon(Icons.done, color: Colors.black , )),
-        MenuItem(title:  getTranslated("not_delivered", context), image: Icon(Icons.phonelink_erase_rounded, color: Colors.black,)),
+      popup.  MenuItem(title: getTranslated("delivery_done", context), image: Icon(Icons.done, color: Colors.black , )),
+       popup. MenuItem(title:  getTranslated("not_delivered", context), image: Icon(Icons.phonelink_erase_rounded, color: Colors.black,)),
       ],
-      onClickMenu: (MenuItemProvider menuItem){
+      onClickMenu: (popup.MenuItemProvider menuItem){
         if(menuItem.menuTitle ==  getTranslated("delivery_done", context) ) {
         //  scan()  ;
        onDeliveryDone() ;
